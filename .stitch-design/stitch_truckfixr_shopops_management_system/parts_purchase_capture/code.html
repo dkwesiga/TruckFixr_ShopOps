@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TruckFixr ShopOps - Parts Capture</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#ffdcc6",
+                        "surface-container": "#ededf4",
+                        "inverse-surface": "#2e3036",
+                        "on-surface-variant": "#424751",
+                        "tertiary-fixed-dim": "#ffb783",
+                        "background": "#f9f9ff",
+                        "secondary-fixed-dim": "#ffb785",
+                        "inverse-on-surface": "#f0f0f7",
+                        "primary-container": "#1e5fa8",
+                        "primary": "#004787",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#d5e3ff",
+                        "surface-dim": "#d9dae0",
+                        "outline": "#727782",
+                        "on-secondary-container": "#673100",
+                        "outline-variant": "#c2c6d3",
+                        "surface-bright": "#f9f9ff",
+                        "on-tertiary-container": "#ffd0b0",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed": "#301400",
+                        "surface-container-low": "#f3f3fa",
+                        "surface-variant": "#e1e2e9",
+                        "on-surface": "#191c20",
+                        "secondary-container": "#fd8f36",
+                        "on-secondary-fixed": "#301400",
+                        "ai-highlight": "#EEF4FF",
+                        "on-primary-fixed": "#001c3b",
+                        "on-secondary-fixed-variant": "#723600",
+                        "inverse-primary": "#a6c8ff",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#1e5fa8",
+                        "on-primary-container": "#c5daff",
+                        "surface-container-high": "#e7e8ee",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e1e2e9",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#a6c8ff",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#703700",
+                        "secondary": "#954a00",
+                        "on-background": "#191c20",
+                        "on-primary-fixed-variant": "#004787",
+                        "status-alert": "#D32F2F",
+                        "status-approved": "#2E7D32",
+                        "tertiary-fixed": "#ffdcc5",
+                        "tertiary": "#713800",
+                        "status-pending": "#F2862E",
+                        "surface": "#f9f9ff",
+                        "on-secondary": "#ffffff",
+                        "surface-dark": "#121212",
+                        "tertiary-container": "#944b00",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "margin-desktop": "32px",
+                        "unit-md": "16px",
+                        "touch-target": "48px",
+                        "margin-mobile": "16px",
+                        "unit-lg": "24px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-bold": ["Inter"],
+                        "headline-xl": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ai-shimmer {
+            background: linear-gradient(90deg, rgba(238,244,255,1) 0%, rgba(213,227,255,1) 50%, rgba(238,244,255,1) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-touch-target bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="menu">menu</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">TruckFixr ShopOps</h1>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-high border border-outline-variant">
+<img alt="User Profile" data-alt="A professional high-resolution headshot of a heavy-duty truck shop manager in a clean uniform. The lighting is crisp and industrial, set against a blurred background of a modern diagnostic center. The color palette emphasizes clean whites, professional blues, and metallic grays, reflecting a high-end, efficient automotive service environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_f7JPSQYrbVi4OmU9qwtLKrFBL03AzL45waJJ8PSdowiDgKH0A96DW0-c02AjTUXv0jGEtccYPhiBfdkY3dJjqpU4luCvJQm0VLSxdR2wSznXPXFDscTzXiT_-9QO1EsAAV6mQos4tlQ8OziypZ_caAAGEdh7ZVyGWhAqzJu4twUe9b1Z9NB1mjc3cOyXlCwyxh-xZ5Bj0FTI-cTPuTNGhpcWUH_Iuu3-q5hr6Bg0kXtRdBNBXJX34wLM1psPRMEQm57gbEY9Mwx2"/>
+</div>
+</header>
+<main class="mt-14 p-margin-mobile max-w-xl mx-auto space-y-gutter">
+<!-- Header Section -->
+<section class="flex flex-col gap-2">
+<h2 class="font-headline-md text-headline-md text-on-surface">Parts Purchase Capture</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Verify AI-extracted line items from your vendor invoice.</p>
+</section>
+<!-- Vendor Invoice Thumbnail -->
+<div class="relative group cursor-pointer overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest h-40 flex items-center justify-center">
+<img alt="Vendor Invoice" class="absolute inset-0 w-full h-full object-cover opacity-60 transition-transform duration-500 group-hover:scale-105" data-alt="A high-angle, detailed close-up of a printed commercial truck parts invoice resting on a clean, industrial stainless steel workbench. The document shows columns of text, numbers, and a bold vendor logo, with mechanical tools like a wrench softly blurred in the periphery. The lighting is bright and cool-toned, creating a sharp, professional industrial atmosphere focused on clerical precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUHpWrWXBtLFN4bnyjFDc16p76b-f_2xxBoFsLrne5K6oYTTW-ilH8TmG1P_5rt-shJWXYCjJEodmLXvVQP1-J_505S2MwPgfIjV2Uzm3-FoosP_g0jQVA3_3xCDend8-XjSeygtcF0q_aesZqjQeNAQ-8cPQmH1BAwm_WoYD9JqSKXc3QWBpzr71Bl8TXBPzWZTsQhxvR-akTwrSHy4SrC8sSp9fN7AzkAA6u3nqGcdVo6u5kAjdntNhlPaM5Ub_d6M5JRR8E4kNf"/>
+<div class="relative z-10 flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-on-surface text-4xl" data-icon="image">image</span>
+<span class="font-label-bold text-label-bold text-on-surface bg-surface/80 px-4 py-1 rounded-full backdrop-blur-sm">View Full Invoice</span>
+</div>
+<div class="absolute top-3 right-3 bg-status-approved text-white px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>
+                Captured
+            </div>
+</div>
+<!-- Editable Line Items -->
+<section class="space-y-base">
+<div class="flex justify-between items-center px-2 pb-2">
+<h3 class="font-label-bold text-label-bold text-on-surface-variant">LINE ITEMS (4)</h3>
+<button class="text-primary font-label-bold text-label-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span> Add Missing
+                </button>
+</div>
+<!-- Card 1 (AI Suggested) -->
+<div class="bg-ai-highlight p-4 rounded-xl border border-primary-fixed/30 space-y-3 relative overflow-hidden shadow-sm">
+<div class="flex justify-between items-start">
+<div>
+<span class="font-label-sm text-label-sm text-on-primary-fixed-variant uppercase tracking-wider">Part Description</span>
+<p class="font-label-bold text-body-md text-on-surface">Heavy Duty Brake Pad Set - Rear</p>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-white border border-outline-variant text-on-surface-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-status-approved text-white shadow-md">
+<span class="material-symbols-outlined" data-icon="check">check</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Part Number</span>
+<p class="font-body-md text-on-surface font-mono">B-10992-TX</p>
+</div>
+<div class="opacity-60">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Vendor Cost</span>
+<p class="font-body-md text-on-surface">$142.50</p>
+</div>
+</div>
+<div class="flex items-center gap-4 pt-2 border-t border-primary-fixed/20">
+<div class="flex-1">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Sell Price</label>
+<div class="relative h-touch-target">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold">$</span>
+<input class="w-full h-full pl-7 pr-3 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent font-body-md" type="number" value="213.75"/>
+</div>
+</div>
+<div class="w-24">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Markup %</label>
+<div class="relative h-touch-target">
+<input class="w-full h-full px-3 bg-surface-container-low border border-outline-variant rounded-lg font-body-md" type="number" value="50"/>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant">%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant space-y-3 shadow-sm">
+<div class="flex justify-between items-start">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Part Description</span>
+<p class="font-label-bold text-body-md text-on-surface">Oil Filter - High Flow Synthetic</p>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-white border border-outline-variant text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container border border-outline-variant text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="check">check</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Part Number</span>
+<p class="font-body-md text-on-surface font-mono">OF-7721</p>
+</div>
+<div class="opacity-60">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Vendor Cost</span>
+<p class="font-body-md text-on-surface">$28.90</p>
+</div>
+</div>
+<div class="flex items-center gap-4 pt-2 border-t border-outline-variant">
+<div class="flex-1">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Sell Price</label>
+<div class="relative h-touch-target">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold">$</span>
+<input class="w-full h-full pl-7 pr-3 bg-white border border-outline-variant rounded-lg font-body-md" type="number" value="43.35"/>
+</div>
+</div>
+<div class="w-24">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Markup %</label>
+<div class="relative h-touch-target">
+<input class="w-full h-full px-3 bg-surface-container-low border border-outline-variant rounded-lg font-body-md" type="number" value="50"/>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant">%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Summary Card -->
+<div class="bg-surface-container-high p-4 rounded-xl border border-outline-variant flex justify-between items-center">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">ESTIMATED PROFIT</span>
+<span class="font-headline-md text-headline-md text-status-approved font-bold">+$85.70</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant">TOTAL SELL</span>
+<span class="font-headline-md text-headline-md text-on-surface font-bold">$257.10</span>
+</div>
+</div>
+</section>
+<!-- Primary Action -->
+<div class="pt-2">
+<button class="w-full h-touch-target bg-primary text-white font-label-bold text-headline-md rounded-xl shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="library_add">library_add</span>
+                Add all to job
+            </button>
+<p class="text-center font-label-sm text-label-sm text-on-surface-variant mt-3 italic flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="auto_awesome">auto_awesome</span> AI-extracted fields may require manual verification
+            </p>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface border-t border-outline-variant shadow-lg rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 scale-105 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-label-sm text-label-sm">Estimates</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm">Invoices</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Customers</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+<span class="font-label-sm text-label-sm">More</span>
+</a>
+</nav>
+<!-- Micro-interaction Script -->
+<script>
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.parentElement.closest('.bg-ai-highlight, .bg-surface-container-lowest').classList.add('ring-2', 'ring-primary/20');
+            });
+            input.addEventListener('blur', function() {
+                this.parentElement.parentElement.closest('.bg-ai-highlight, .bg-surface-container-lowest').classList.remove('ring-2', 'ring-primary/20');
+            });
+        });
+
+        // Simple button active state visual feedback
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('touchstart', () => btn.classList.add('opacity-80'));
+            btn.addEventListener('touchend', () => btn.classList.remove('opacity-80'));
+        });
+    </script>
+</body></html>

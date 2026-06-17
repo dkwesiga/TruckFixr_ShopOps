@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TruckFixr Receipt - #RE-8829</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#004787",
+                    "on-secondary-container": "#673100",
+                    "on-secondary-fixed-variant": "#723600",
+                    "outline-variant": "#c2c6d3",
+                    "secondary-container": "#fd8f36",
+                    "on-background": "#191c20",
+                    "inverse-surface": "#2e3036",
+                    "on-error": "#ffffff",
+                    "surface-variant": "#e1e2e9",
+                    "on-secondary-fixed": "#301400",
+                    "surface-dark": "#121212",
+                    "surface-container-low": "#f3f3fa",
+                    "on-error-container": "#93000a",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed": "#ffdcc6",
+                    "tertiary-fixed-dim": "#ffb783",
+                    "on-secondary": "#ffffff",
+                    "surface-container": "#ededf4",
+                    "surface-container-highest": "#e1e2e9",
+                    "primary-fixed": "#d5e3ff",
+                    "status-approved": "#2E7D32",
+                    "tertiary-container": "#944b00",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#1e5fa8",
+                    "surface-dim": "#d9dae0",
+                    "on-primary": "#ffffff",
+                    "status-alert": "#D32F2F",
+                    "secondary": "#954a00",
+                    "inverse-primary": "#a6c8ff",
+                    "on-primary-fixed-variant": "#004787",
+                    "tertiary": "#713800",
+                    "secondary-fixed-dim": "#ffb785",
+                    "on-primary-fixed": "#001c3b",
+                    "on-tertiary-fixed": "#301400",
+                    "inverse-on-surface": "#f0f0f7",
+                    "primary-fixed-dim": "#a6c8ff",
+                    "on-tertiary-container": "#ffd0b0",
+                    "primary-container": "#1e5fa8",
+                    "on-tertiary-fixed-variant": "#703700",
+                    "error-container": "#ffdad6",
+                    "ai-highlight": "#EEF4FF",
+                    "on-tertiary": "#ffffff",
+                    "background": "#f9f9ff",
+                    "surface-container-high": "#e7e8ee",
+                    "surface": "#f9f9ff",
+                    "on-surface": "#191c20",
+                    "tertiary-fixed": "#ffdcc5",
+                    "on-surface-variant": "#424751",
+                    "surface-bright": "#f9f9ff",
+                    "outline": "#727782",
+                    "on-primary-container": "#c5daff",
+                    "status-pending": "#F2862E"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-desktop": "32px",
+                    "gutter": "16px",
+                    "touch-target": "48px",
+                    "unit-md": "16px",
+                    "base": "4px",
+                    "margin-mobile": "16px",
+                    "unit-lg": "24px"
+            },
+            "fontFamily": {
+                    "label-bold": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-xl": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-bold": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "26px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: white !important; }
+            .print-shadow { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .stamp-rotate {
+            transform: rotate(-12deg);
+        }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-surface antialiased min-h-screen">
+<!-- Top Navigation Shell (Filtered for transactional focus - only simple TopAppBar) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-touch-target bg-surface border-b border-outline-variant no-print">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">receipt_long</span>
+<span class="font-headline-lg font-bold text-primary">Midwest Truck &amp; Trailer Repair</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-on-primary font-label-bold hover:opacity-90 transition-all active:scale-95" onclick="window.print()">
+<span class="material-symbols-outlined text-[20px]">print</span>
+                Print Receipt
+            </button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeuo_Z8H6uQvJZpTEU6evowAk9lMVRn50pQa6uDhu-t_Ef-0RY3H0wOjq6plociH1DDBTuhgSA02K71qyR-CbYGWZihmGS3j2cbpD_EhQTfosG9HnMBXJ7NgRq06qL94zPySfgR9W2vJ-y4SNxP6sCoWG2DJrA-56UYDuTUlCF2xViCj0o7lKlO5EmdoqxhKDzWM3FQ2f--BfBI04tqglR5IRTQWpfJrB43zV2U84wjdzn6tqtK2I8VsyZrMZCk-BWFx0zQo0LM7ok"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-12 px-margin-mobile md:px-margin-desktop max-w-[1000px] mx-auto">
+<!-- Receipt Canvas -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant print-shadow shadow-sm overflow-hidden p-8 md:p-12">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start gap-8 mb-12">
+<div class="flex flex-col gap-2">
+<h1 class="font-headline-xl text-primary uppercase tracking-wider">RECEIPT</h1>
+<div class="flex flex-col gap-1 text-on-surface-variant font-label-bold">
+<div class="flex gap-2">
+<span>Receipt #:</span>
+<span class="text-on-surface">RE-8829-2023</span>
+</div>
+<div class="flex gap-2">
+<span>Payment Date:</span>
+<span class="text-on-surface">October 24, 2023</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<h2 class="font-headline-md text-on-surface">Midwest Truck &amp; Trailer Repair</h2>
+<p class="text-on-surface-variant text-label-sm">1200 Distribution Way<br/>Aurora, IL 60502<br/>(630) 555-0912<br/>service@midwestrepair.com</p>
+</div>
+</div>
+<!-- Customer & Vehicle Info Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 border-y border-outline-variant py-8">
+<div>
+<h3 class="font-label-bold text-primary uppercase mb-4 tracking-tight">Customer Information</h3>
+<p class="font-body-lg font-bold">Midwest Logistics Corp.</p>
+<p class="text-on-surface-variant">Attn: Marcus Reynolds</p>
+<p class="text-on-surface-variant">1200 Distribution Way, Aurora, IL 60502</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg border border-outline-variant/30">
+<h3 class="font-label-bold text-primary uppercase mb-4 tracking-tight">Vehicle Details</h3>
+<div class="flex gap-4 items-center">
+<span class="material-symbols-outlined text-on-surface-variant">local_shipping</span>
+<div>
+<p class="font-body-md font-bold">2019 Kenworth T680</p>
+<p class="text-on-surface-variant text-label-sm">VIN: 1NK-D4X9-88-KJ29384 | Unit #402</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Payment Summary -->
+<div class="mb-12">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 space-y-4">
+<div class="flex justify-between items-center p-4 bg-white border border-outline-variant rounded-lg">
+<span class="font-label-bold text-on-surface-variant">Payment For</span>
+<span class="font-body-md font-bold text-primary">Invoice #INV-20492</span>
+</div>
+<div class="flex justify-between items-center p-4 bg-white border border-outline-variant rounded-lg">
+<span class="font-label-bold text-on-surface-variant">Payment Method</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">credit_card</span>
+<span class="font-body-md font-bold text-on-surface">Visa ending in •••• 4920</span>
+</div>
+</div>
+<div class="flex justify-between items-center p-4 bg-white border border-outline-variant rounded-lg">
+<span class="font-label-bold text-on-surface-variant">Transaction ID</span>
+<span class="font-body-md text-on-surface">TXN-88219477-XQ</span>
+</div>
+</div>
+<!-- Highlight Amount Box -->
+<div class="bg-secondary-container flex flex-col items-center justify-center p-6 rounded-xl border-2 border-secondary h-full text-center">
+<span class="font-label-bold text-on-secondary-container uppercase mb-2">Amount Paid</span>
+<span class="font-headline-xl text-on-secondary-container text-[42px] leading-tight">$3,482.50</span>
+<span class="text-on-secondary-fixed-variant text-label-sm mt-2">USD - Successful</span>
+</div>
+</div>
+</div>
+<!-- Breakdown Ledger -->
+<div class="mb-12 overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b-2 border-primary">
+<th class="py-4 font-label-bold text-primary uppercase text-label-sm">Description</th>
+<th class="py-4 px-4 font-label-bold text-primary uppercase text-label-sm text-right">Invoice Total</th>
+<th class="py-4 px-4 font-label-bold text-primary uppercase text-label-sm text-right">Paid to Date</th>
+<th class="py-4 font-label-bold text-primary uppercase text-label-sm text-right">Balance Due</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr>
+<td class="py-6">
+<div class="font-body-md font-bold text-on-surface">Full Service Engine Overhaul</div>
+<div class="text-on-surface-variant text-label-sm">Parts &amp; Labor associated with INV-20492</div>
+</td>
+<td class="py-6 px-4 text-right font-body-md">$3,482.50</td>
+<td class="py-6 px-4 text-right font-body-md">$3,482.50</td>
+<td class="py-6 text-right font-body-md font-bold text-status-approved">$0.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Footer & Stamp -->
+<div class="flex flex-col md:flex-row justify-between items-center gap-12 mt-16 pt-8 border-t border-outline-variant border-dashed">
+<div class="flex flex-col items-center md:items-start text-center md:text-left">
+<p class="font-label-bold text-primary mb-2">Technical Support &amp; Inquiries</p>
+<p class="text-on-surface-variant text-label-sm max-w-sm">If you have questions regarding this payment or the service performed, please reach out to our service desk at (630) 555-0912 or visit our customer portal.</p>
+</div>
+<!-- Paid Stamp Aesthetic -->
+<div class="relative w-48 h-24 flex items-center justify-center opacity-80 pointer-events-none">
+<div class="stamp-rotate border-4 border-status-approved p-4 rounded-xl flex flex-col items-center justify-center bg-white/50">
+<span class="font-headline-xl text-status-approved uppercase leading-none font-extrabold tracking-tighter">PAID</span>
+<span class="font-label-bold text-status-approved uppercase text-label-sm mt-1">Full Transaction</span>
+<span class="text-status-approved text-[10px] opacity-70">CONFIRMED: 2023-10-24</span>
+</div>
+</div>
+</div>
+<div class="mt-12 text-center text-on-surface-variant opacity-50 text-[10px]">Powered by TruckFixr ShopOps v2.4.0. This is an official document from Midwest Truck &amp; Trailer Repair.</div>
+</div>
+<!-- Secondary Action (Mobile Friendly / Desktop Centered) -->
+<div class="mt-8 flex flex-col md:flex-row justify-center gap-4 no-print">
+<button class="px-8 py-3 rounded-full border border-primary text-primary font-label-bold hover:bg-surface-container-low transition-all active:scale-95 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">download</span>
+                Download PDF
+            </button>
+<button class="px-8 py-3 rounded-full bg-surface-variant text-on-surface-variant font-label-bold hover:bg-outline-variant transition-all active:scale-95 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+                Email Receipt
+            </button>
+</div>
+</main>
+<!-- Success Message Micro-interaction -->
+<div class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface px-6 py-3 rounded-full shadow-xl flex items-center gap-3 opacity-0 transition-opacity pointer-events-none no-print" id="print-toast">
+<span class="material-symbols-outlined text-status-approved">check_circle</span>
+<span class="font-label-bold">Receipt ready for printing</span>
+</div>
+<script>
+        window.addEventListener('beforeprint', () => {
+            // Optional: Hide extra elements if they weren't caught by no-print
+        });
+
+        // Small toast feedback for printing
+        const showToast = () => {
+            const toast = document.getElementById('print-toast');
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 3000);
+        };
+
+        // Listen for cmd+p or ctrl+p
+        window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                showToast();
+            }
+        });
+    </script>
+</body></html>

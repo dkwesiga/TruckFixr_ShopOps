@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Estimate - TruckFixr ShopOps</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; padding: 0; }
+            .print-container { border: none !important; box-shadow: none !important; }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#004787",
+                        "on-secondary-container": "#673100",
+                        "on-secondary-fixed-variant": "#723600",
+                        "outline-variant": "#c2c6d3",
+                        "secondary-container": "#fd8f36",
+                        "on-background": "#191c20",
+                        "inverse-surface": "#2e3036",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#e1e2e9",
+                        "on-secondary-fixed": "#301400",
+                        "surface-dark": "#121212",
+                        "surface-container-low": "#f3f3fa",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffdcc6",
+                        "tertiary-fixed-dim": "#ffb783",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#ededf4",
+                        "surface-container-highest": "#e1e2e9",
+                        "primary-fixed": "#d5e3ff",
+                        "status-approved": "#2E7D32",
+                        "tertiary-container": "#944b00",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#1e5fa8",
+                        "surface-dim": "#d9dae0",
+                        "on-primary": "#ffffff",
+                        "status-alert": "#D32F2F",
+                        "secondary": "#954a00",
+                        "inverse-primary": "#a6c8ff",
+                        "on-primary-fixed-variant": "#004787",
+                        "tertiary": "#713800",
+                        "secondary-fixed-dim": "#ffb785",
+                        "on-primary-fixed": "#001c3b",
+                        "on-tertiary-fixed": "#301400",
+                        "inverse-on-surface": "#f0f0f7",
+                        "primary-fixed-dim": "#a6c8ff",
+                        "on-tertiary-container": "#ffd0b0",
+                        "primary-container": "#1e5fa8",
+                        "on-tertiary-fixed-variant": "#703700",
+                        "error-container": "#ffdad6",
+                        "ai-highlight": "#EEF4FF",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f9f9ff",
+                        "surface-container-high": "#e7e8ee",
+                        "surface": "#f9f9ff",
+                        "on-surface": "#191c20",
+                        "tertiary-fixed": "#ffdcc5",
+                        "on-surface-variant": "#424751",
+                        "surface-bright": "#f9f9ff",
+                        "outline": "#727782",
+                        "on-primary-container": "#c5daff",
+                        "status-pending": "#F2862E"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "32px",
+                        "gutter": "16px",
+                        "touch-target": "48px",
+                        "unit-md": "16px",
+                        "base": "4px",
+                        "margin-mobile": "16px",
+                        "unit-lg": "24px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "26px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface font-body-md text-on-surface min-h-screen pb-margin-desktop">
+<!-- Top Navigation Anchor (As per Shared Components Logic) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-touch-target bg-surface border-b border-outline-variant no-print">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">menu</span>
+<span class="font-headline-md text-headline-md font-bold text-primary">TruckFixr ShopOps</span>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-primary font-label-bold" href="#">Home</a>
+<a class="text-on-surface-variant font-label-bold hover:bg-surface-container-low px-3 py-1 rounded-full transition-all" href="#">Estimates</a>
+<a class="text-on-surface-variant font-label-bold hover:bg-surface-container-low px-3 py-1 rounded-full transition-all" href="#">Invoices</a>
+</nav>
+<div class="h-8 w-8 rounded-full bg-primary-container overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a service manager in a clean shop uniform, smiling confidently. The lighting is bright and clear, reflecting a modern industrial office environment with soft blues and grays in the background. The style is high-definition photography with a shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyh2GlGVFSd2c__3LvBcrgQ2M4WKG1jRXZrlT-Fd9NgE-yVgSviGxpAOwkUp-n7pn0NPHtQicSuxWlyL1zARpJd0diUeH-JcYwlMwmVe-DZn2LN2YPTCRGo27pMsNMXk_hm8ShpyTjlDDrH7eKSGP2qy0pOC-OYdkWskffeNA0bXb4WWWLuB6EIGaX_JdGAk7MPvNoRLK24RhF_3eK0uZB-RHY0vTlMnGsBc2Hm0IBq2kvjm6q6UpEc6qPjIhJxeRLWCVVImN3jsoi"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-[80px] max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop">
+<!-- Action Bar -->
+<div class="no-print flex justify-between items-center mb-8">
+<button class="flex items-center gap-2 text-primary font-label-bold hover:underline" onclick="window.history.back()">
+<span class="material-symbols-outlined">arrow_back</span> Back to List
+            </button>
+<div class="flex gap-4">
+<button class="px-6 h-touch-target border border-primary text-primary rounded-xl font-label-bold hover:bg-primary-container/10 active:scale-95 transition-all">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined">edit</span> Edit Estimate</span>
+</button>
+<button class="px-6 h-touch-target bg-primary text-on-primary rounded-xl font-label-bold hover:opacity-90 active:scale-95 transition-all shadow-md" onclick="window.print()">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined">print</span> Print / Export</span>
+</button>
+</div>
+</div>
+<!-- Estimate Document Card -->
+<div class="print-container bg-surface-container-lowest border border-outline-variant rounded-xl shadow-xl overflow-hidden min-h-[1400px] flex flex-col">
+<!-- Document Header -->
+<div class="p-10 md:p-12 border-b-2 border-primary/10 flex flex-col md:flex-row justify-between gap-8">
+<!-- Company Info -->
+<div class="flex gap-6">
+<div class="flex flex-col">
+<h1 class="font-headline-lg text-headline-lg text-primary mb-2 uppercase tracking-tight">TruckFixr Solutions LLC</h1>
+<p class="text-on-surface-variant font-body-md">1254 Industrial Parkway, Suite 400</p>
+<p class="text-on-surface-variant font-body-md">Chicago, IL 60601</p>
+<p class="text-on-surface-variant font-body-md mt-2">
+<span class="font-label-bold text-on-surface">P:</span> (555) 123-4567 | <span class="font-label-bold text-on-surface">E:</span> service@truckfixr.com
+                        </p>
+</div>
+</div>
+<!-- Estimate Identity -->
+<div class="text-left md:text-right flex flex-col justify-end">
+<h2 class="font-headline-xl text-headline-xl text-primary font-extrabold tracking-tighter">ESTIMATE</h2>
+<div class="mt-4 space-y-1">
+<p class="text-on-surface-variant"><span class="font-label-bold text-on-surface">ESTIMATE #:</span> <span class="font-mono">EST-2023-0892</span></p>
+<p class="text-on-surface-variant"><span class="font-label-bold text-on-surface">DATE:</span> Oct 24, 2023</p>
+<p class="text-on-surface-variant"><span class="font-label-bold text-on-surface">EXPIRY:</span> Nov 23, 2023</p>
+</div>
+</div>
+</div>
+<!-- Customer & Vehicle Section -->
+<div class="grid grid-cols-1 md:grid-cols-2">
+<!-- Bill To -->
+<div class="p-10 md:p-12 border-b md:border-b-0 md:border-r border-outline-variant">
+<h3 class="font-label-bold text-primary uppercase tracking-widest text-label-sm mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">person</span> Bill To
+                    </h3>
+<div class="space-y-1">
+<p class="font-headline-md text-headline-md">Titan Logistics Solutions</p>
+<p class="text-on-surface-variant">Attn: Mark Henderson</p>
+<p class="text-on-surface-variant">4500 Transport Way</p>
+<p class="text-on-surface-variant">Gary, IN 46402</p>
+<p class="text-on-surface-variant mt-2">(219) 555-0192</p>
+<p class="text-primary">m.henderson@titanlogistics.com</p>
+</div>
+</div>
+<!-- Vehicle Info -->
+<div class="p-10 md:p-12">
+<h3 class="font-label-bold text-primary uppercase tracking-widest text-label-sm mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">local_shipping</span> Vehicle Info
+                    </h3>
+<div class="grid grid-cols-2 gap-y-4">
+<div>
+<p class="font-label-sm text-outline uppercase">Year / Make / Model</p>
+<p class="font-label-bold text-on-surface">2021 Peterbilt 579</p>
+</div>
+<div>
+<p class="font-label-sm text-outline uppercase">Unit #</p>
+<p class="font-label-bold text-on-surface">TLS-8821</p>
+</div>
+<div class="col-span-2">
+<p class="font-label-sm text-outline uppercase">VIN</p>
+<p class="font-mono text-on-surface">1XP5D49X7MD123456</p>
+</div>
+<div>
+<p class="font-label-sm text-outline uppercase">Odometer</p>
+<p class="font-label-bold text-on-surface">342,150 mi</p>
+</div>
+<div>
+<p class="font-label-sm text-outline uppercase">Engine</p>
+<p class="font-label-bold text-on-surface">PACCAR MX-13</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Line Items Table -->
+<div class="flex-grow">
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-surface-container-high border-y border-outline-variant">
+<th class="px-10 py-4 text-left font-label-bold text-on-surface uppercase text-label-sm">Description</th>
+<th class="px-6 py-4 text-center font-label-bold text-on-surface uppercase text-label-sm w-32">Qty / Hrs</th>
+<th class="px-6 py-4 text-right font-label-bold text-on-surface uppercase text-label-sm w-32">Rate</th>
+<th class="px-10 py-4 text-right font-label-bold text-on-surface uppercase text-label-sm w-40">Amount</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-10 py-6">
+<p class="font-label-bold text-on-surface">Engine Diagnostic - Active Check Engine Light</p>
+<p class="text-label-sm text-outline mt-1">Full system scan, sensor testing and wiring inspection. Identified faulty NOX sensor.</p>
+</td>
+<td class="px-6 py-6 text-center text-on-surface-variant">2.00</td>
+<td class="px-6 py-6 text-right text-on-surface-variant">$145.00</td>
+<td class="px-10 py-6 text-right font-label-bold text-on-surface">$290.00</td>
+</tr>
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="px-10 py-6">
+<p class="font-label-bold text-on-surface">OEM Nitrogen Oxide (NOx) Sensor - Inlet</p>
+<p class="text-label-sm text-outline mt-1">Part #22303391 - Genuine PACCAR Replacement</p>
+</td>
+<td class="px-6 py-6 text-center text-on-surface-variant">1.00</td>
+<td class="px-6 py-6 text-right text-on-surface-variant">$645.00</td>
+<td class="px-10 py-6 text-right font-label-bold text-on-surface">$645.00</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-10 py-6">
+<p class="font-label-bold text-on-surface">Labor: NOx Sensor Replacement &amp; Calibration</p>
+<p class="text-label-sm text-outline mt-1">R&amp;R sensor, clear fault codes, performed stationary regeneration.</p>
+</td>
+<td class="px-6 py-6 text-center text-on-surface-variant">3.50</td>
+<td class="px-6 py-6 text-right text-on-surface-variant">$145.00</td>
+<td class="px-10 py-6 text-right font-label-bold text-on-surface">$507.50</td>
+</tr>
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="px-10 py-6">
+<p class="font-label-bold text-on-surface">PM Level B Service Package</p>
+<p class="text-label-sm text-outline mt-1">Oil, fuel, and water separator filter changes. Chassis grease and 50-point safety inspection.</p>
+</td>
+<td class="px-6 py-6 text-center text-on-surface-variant">1.00</td>
+<td class="px-6 py-6 text-right text-on-surface-variant">$450.00</td>
+<td class="px-10 py-6 text-right font-label-bold text-on-surface">$450.00</td>
+</tr>
+<!-- AI Suggested Line Item -->
+<tr class="bg-ai-highlight border-l-4 border-primary/30">
+<td class="px-10 py-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">auto_awesome</span>
+<p class="font-label-bold text-primary">AI Suggested: Brake Pad Replacement (Steer Axle)</p>
+</div>
+<p class="text-label-sm text-on-surface-variant mt-1">During inspection, pads measured at 4/32". Recommended replacement before next interval.</p>
+</td>
+<td class="px-6 py-6 text-center text-on-surface-variant">1.00</td>
+<td class="px-6 py-6 text-right text-on-surface-variant">$380.00</td>
+<td class="px-10 py-6 text-right font-label-bold text-primary">$380.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Totals & Footer -->
+<div class="p-10 md:p-12 bg-surface-container-low flex flex-col md:flex-row justify-between gap-12 mt-auto">
+<!-- Terms & Footer Notes -->
+<div class="flex-1 max-w-lg">
+<h4 class="font-label-bold text-on-surface mb-4">Notes &amp; Warranty Info</h4>
+<div class="text-label-sm text-on-surface-variant space-y-4 leading-relaxed">
+<p>All labor is warrantied for 90 days or 10,000 miles, whichever occurs first. Parts warranty is subject to the original manufacturer's terms. Please note that this is an estimate and not a final bill; prices for parts and labor are subject to change if additional repairs are identified during service.</p>
+<p class="font-label-bold text-primary">Thank you for choosing TruckFixr ShopOps for your fleet maintenance needs. We value your business!</p>
+<div class="pt-8 flex gap-12">
+<div class="flex-1 border-t border-outline-variant pt-2">
+<p class="text-[10px] uppercase font-bold text-outline">Customer Signature</p>
+</div>
+<div class="flex-1 border-t border-outline-variant pt-2">
+<p class="text-[10px] uppercase font-bold text-outline">Date Approved</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Financial Summary -->
+<div class="w-full md:w-80 space-y-3">
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-label-bold">Subtotal</span>
+<span class="font-mono">$2,272.50</span>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-label-bold">Tax (HST 13%)</span>
+<span class="font-mono">$295.43</span>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant border-b border-outline-variant pb-4">
+<span class="font-label-bold">Shop Supplies</span>
+<span class="font-mono">$45.00</span>
+</div>
+<div class="flex justify-between items-center pt-2">
+<span class="font-headline-md text-primary font-extrabold uppercase">Total Amount</span>
+<span class="font-headline-lg text-secondary-container bg-on-secondary-fixed text-white px-4 py-1 rounded-lg font-mono">$2,612.93</span>
+</div>
+<div class="mt-8 flex flex-col gap-2 no-print">
+<button class="w-full h-touch-target bg-secondary-container text-on-secondary-container font-label-bold rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95 shadow-md">
+<span class="material-symbols-outlined">check_circle</span> Approve Estimate
+                        </button>
+</div>
+</div>
+<div class="w-full border-t border-outline-variant/30 mt-8 pt-4 flex items-center justify-center gap-2 opacity-50 grayscale"><span class="text-[10px] font-label-bold uppercase tracking-widest">Powered by</span><img alt="ShopOps Logo" class="h-4 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqp6x1m40Eu2_Sg2im4l0ChuiIX1nb3anGmh_UH4P674xU3317wXisXEN0Z5ujfsjZqsSS4k2opL_QlcqJUQhQ02oCxoimPxmq0h58FW-3mouDxrQ2IEdsTzPQp_totaZSSEt4O3911n7umfo4hj6L3b_Mg_EitwC2755JOfshvukBKoL6UBootq0FER4I1S9p9p2Rtj1PfRmSZev6T6zHkSiwrh8l_KpVfl1p6kWHL9zvo424DI6mXJ1u8DZJZyN5ISyKq6YMZx27"/><span class="text-[10px] font-label-bold uppercase tracking-widest">ShopOps</span></div></div>
+</div>
+</main>
+<!-- Mobile Navigation Anchor (Shared Component Logic) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface border-t border-outline-variant shadow-lg no-print">
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-sm text-label-sm">Estimates</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-sm text-label-sm">Invoices</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Customers</span>
+</div>
+</nav>
+<script>
+        // Micro-interaction for table rows
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', () => {
+                row.classList.add('scale-[0.99]', 'opacity-80');
+                setTimeout(() => {
+                    row.classList.remove('scale-[0.99]', 'opacity-80');
+                }, 100);
+            });
+        });
+    </script>
+</body></html>

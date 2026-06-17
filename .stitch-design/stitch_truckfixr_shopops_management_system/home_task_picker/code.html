@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed": "#ffdcc6",
+                    "surface-container": "#ededf4",
+                    "inverse-surface": "#2e3036",
+                    "on-surface-variant": "#424751",
+                    "tertiary-fixed-dim": "#ffb783",
+                    "background": "#f9f9ff",
+                    "secondary-fixed-dim": "#ffb785",
+                    "inverse-on-surface": "#f0f0f7",
+                    "primary-container": "#1e5fa8",
+                    "primary": "#004787",
+                    "on-primary": "#ffffff",
+                    "primary-fixed": "#d5e3ff",
+                    "surface-dim": "#d9dae0",
+                    "outline": "#727782",
+                    "on-secondary-container": "#673100",
+                    "outline-variant": "#c2c6d3",
+                    "surface-bright": "#f9f9ff",
+                    "on-tertiary-container": "#ffd0b0",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed": "#301400",
+                    "surface-container-low": "#f3f3fa",
+                    "surface-variant": "#e1e2e9",
+                    "on-surface": "#191c20",
+                    "secondary-container": "#fd8f36",
+                    "on-secondary-fixed": "#301400",
+                    "ai-highlight": "#EEF4FF",
+                    "on-primary-fixed": "#001c3b",
+                    "on-secondary-fixed-variant": "#723600",
+                    "inverse-primary": "#a6c8ff",
+                    "on-error": "#ffffff",
+                    "surface-tint": "#1e5fa8",
+                    "on-primary-container": "#c5daff",
+                    "surface-container-high": "#e7e8ee",
+                    "on-error-container": "#93000a",
+                    "surface-container-highest": "#e1e2e9",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed-dim": "#a6c8ff",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#703700",
+                    "secondary": "#954a00",
+                    "on-background": "#191c20",
+                    "on-primary-fixed-variant": "#004787",
+                    "status-alert": "#D32F2F",
+                    "status-approved": "#2E7D32",
+                    "tertiary-fixed": "#ffdcc5",
+                    "tertiary": "#713800",
+                    "status-pending": "#F2862E",
+                    "surface": "#f9f9ff",
+                    "on-secondary": "#ffffff",
+                    "surface-dark": "#121212",
+                    "tertiary-container": "#944b00",
+                    "surface-container-lowest": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "margin-desktop": "32px",
+                    "unit-md": "16px",
+                    "touch-target": "48px",
+                    "margin-mobile": "16px",
+                    "unit-lg": "24px",
+                    "base": "4px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "label-bold": ["Inter"],
+                    "headline-xl": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "26px", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-bold": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .active-tap:active { transform: scale(0.95); transition: transform 0.1s; }
+        .industrial-shadow { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-32">
+<!-- Top App Bar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-touch-target bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-headline-md" data-icon="menu">menu</span>
+<div class="flex items-center gap-2">
+<img alt="TruckFixr Logo" class="w-8 h-8 rounded-lg object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjxxC4BYbmmouoVdnmacS0lODEwV_GyS_De8yVyBNGDSvIkPNn-7PXl876mQqZkiei3NHslyMROJhYc89F5JavpTANVeVVctIjDAqNmsI5c9RKBASBsIpwUm6Ned3cZQXQlwbMB0dDffBNz5IJjWXICInCfEW9k5mSwYd-PG8N7k05h4R4hkHC5AgpNRFKBRAXzNjmpNuMEWV-QFahzyzeHCudc4hAPZmvJM7Mxr8jzZ-3XNAarhpSQhgIVWzUWIE-7M16Vix-j0UM"/>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">TruckFixr ShopOps</h1>
+</div>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a shop manager in a clean workshop environment. He is middle-aged with a friendly yet authoritative expression, wearing a navy blue branded uniform. The lighting is bright and industrial, reflecting a high-end commercial repair shop. The background is slightly blurred showing organized tool racks and a heavy-duty truck." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7mfQ9VpZHBwA99ChsFzYQKmF6HwuzbEQWwW9e0gJHwPVj495heIPH2YpLSeclAzmrMMtlFZeH5gxluRC01N5KfqhD2iZUTRDc-vzIf8NRrTlqTYUaDoydgu0VDg5-_KN3fYA5VTaxSdRuRVaYCf5LGyNZfkwjGg-o9bIYiEu43NhphWXC0Ej2SAMDTOI2mmWktNZ5xYV6i9s0GumGeEMbsSYodvv0wD2HDB86zOACwuOQceyj1X0HtM2k0ABjdZC-Wx2p1HRO5Tr3"/>
+</div>
+</header>
+<main class="mt-20 px-margin-mobile max-w-[1200px] mx-auto">
+<!-- Greeting Section -->
+<section class="mb-8">
+<h2 class="font-headline-xl text-headline-xl text-on-surface">Good morning, Dickson</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Here's what's happening at the shop today.</p>
+</section>
+<!-- Primary Task Picker Cards -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-12">
+<!-- New Estimate Card -->
+<button class="flex flex-col items-start p-unit-lg bg-surface-container-lowest border border-outline-variant rounded-xl industrial-shadow active:scale-[0.98] transition-transform text-left group">
+<div class="w-14 h-14 bg-primary-fixed rounded-full flex items-center justify-center mb-6 group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-primary text-[32px] group-hover:text-on-primary-container" data-icon="description">description</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">New Estimate</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Create a professional quote for a new repair job.</p>
+</button>
+<!-- New Invoice Card -->
+<button class="flex flex-col items-start p-unit-lg bg-surface-container-lowest border border-outline-variant rounded-xl industrial-shadow active:scale-[0.98] transition-transform text-left group">
+<div class="w-14 h-14 bg-secondary-fixed rounded-full flex items-center justify-center mb-6 group-hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-secondary text-[32px] group-hover:text-on-secondary-container" data-icon="receipt_long">receipt_long</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">New Invoice</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Bill a customer for completed service or parts.</p>
+</button>
+<!-- Record Purchase Card -->
+<button class="flex flex-col items-start p-unit-lg bg-surface-container-lowest border border-outline-variant rounded-xl industrial-shadow active:scale-[0.98] transition-transform text-left group">
+<div class="w-14 h-14 bg-tertiary-fixed rounded-full flex items-center justify-center mb-6 group-hover:bg-tertiary-container transition-colors">
+<span class="material-symbols-outlined text-tertiary text-[32px] group-hover:text-on-tertiary-container" data-icon="shopping_cart">shopping_cart</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Record a Parts Purchase</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Log inventory intake and manage vendor expenses.</p>
+</button>
+</section>
+<!-- Recent Activity -->
+<section>
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-md text-headline-md text-on-surface">Recent Activity</h2>
+<button class="text-primary font-label-bold hover:underline">View All</button>
+</div>
+<div class="space-y-3">
+<!-- Activity Item 1 -->
+<div class="flex items-center gap-4 p-4 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="history">history</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between">
+<h4 class="font-label-bold text-on-surface">Estimate #4290 Drafted</h4>
+<span class="font-label-sm text-on-surface-variant">2m ago</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Kenworth T680 - Brake System Overhaul</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- Activity Item 2 -->
+<div class="flex items-center gap-4 p-4 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="w-12 h-12 rounded-lg bg-status-approved/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-status-approved" data-icon="check_circle">check_circle</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between">
+<h4 class="font-label-bold text-on-surface">Payment Received</h4>
+<span class="font-label-sm text-on-surface-variant">45m ago</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">$4,250.00 from Swift Logistics</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- Activity Item 3 -->
+<div class="flex items-center gap-4 p-4 bg-white border border-outline-variant rounded-xl hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="w-12 h-12 rounded-lg bg-status-pending/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-status-pending" data-icon="pending_actions">pending_actions</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between">
+<h4 class="font-label-bold text-on-surface">Invoice #882 Pending</h4>
+<span class="font-label-sm text-on-surface-variant">1h ago</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Peterbilt 579 - Routine Maintenance</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Feedback FAB -->
+<button class="fixed bottom-24 right-6 flex items-center gap-2 bg-inverse-surface text-inverse-on-surface px-4 py-3 rounded-full shadow-lg hover:bg-black transition-all active:scale-95 z-40">
+<span class="material-symbols-outlined text-[20px]" data-icon="feedback">feedback</span>
+<span class="font-label-bold">Something off? Tell us</span>
+</button>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface border-t border-outline-variant shadow-lg rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 transition-all active:opacity-80 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant transition-all rounded-full" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-label-sm text-label-sm">Estimates</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant transition-all rounded-full" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm">Invoices</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant transition-all rounded-full" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Customers</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant transition-all rounded-full" href="#">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+<span class="font-label-sm text-label-sm">More</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions and Tab Management
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                // This is a static demo, so we're just visualising the tap
+                console.log('Navigating to:', link.innerText.trim());
+            });
+        });
+
+        // Simple Greeting Update Logic
+        const updateGreeting = () => {
+            const hour = new Date().getHours();
+            const greetingEl = document.querySelector('h2.font-headline-xl');
+            if(hour >= 12 && hour < 17) greetingEl.innerText = 'Good afternoon, Dickson';
+            else if(hour >= 17) greetingEl.innerText = 'Good evening, Dickson';
+        };
+        updateGreeting();
+    </script>
+</body></html>

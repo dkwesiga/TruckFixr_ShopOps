@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Invoice - TruckFixr ShopOps</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#004787",
+                        "on-secondary-container": "#673100",
+                        "on-secondary-fixed-variant": "#723600",
+                        "outline-variant": "#c2c6d3",
+                        "secondary-container": "#fd8f36",
+                        "on-background": "#191c20",
+                        "inverse-surface": "#2e3036",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#e1e2e9",
+                        "on-secondary-fixed": "#301400",
+                        "surface-dark": "#121212",
+                        "surface-container-low": "#f3f3fa",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffdcc6",
+                        "tertiary-fixed-dim": "#ffb783",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#ededf4",
+                        "surface-container-highest": "#e1e2e9",
+                        "primary-fixed": "#d5e3ff",
+                        "status-approved": "#2E7D32",
+                        "tertiary-container": "#944b00",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#1e5fa8",
+                        "surface-dim": "#d9dae0",
+                        "on-primary": "#ffffff",
+                        "status-alert": "#D32F2F",
+                        "secondary": "#954a00",
+                        "inverse-primary": "#a6c8ff",
+                        "on-primary-fixed-variant": "#004787",
+                        "tertiary": "#713800",
+                        "secondary-fixed-dim": "#ffb785",
+                        "on-primary-fixed": "#001c3b",
+                        "on-tertiary-fixed": "#301400",
+                        "inverse-on-surface": "#f0f0f7",
+                        "primary-fixed-dim": "#a6c8ff",
+                        "on-tertiary-container": "#ffd0b0",
+                        "primary-container": "#1e5fa8",
+                        "on-tertiary-fixed-variant": "#703700",
+                        "error-container": "#ffdad6",
+                        "ai-highlight": "#EEF4FF",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f9f9ff",
+                        "surface-container-high": "#e7e8ee",
+                        "surface": "#f9f9ff",
+                        "on-surface": "#191c20",
+                        "tertiary-fixed": "#ffdcc5",
+                        "on-surface-variant": "#424751",
+                        "surface-bright": "#f9f9ff",
+                        "outline": "#727782",
+                        "on-primary-container": "#c5daff",
+                        "status-pending": "#F2862E"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "32px",
+                        "gutter": "16px",
+                        "touch-target": "48px",
+                        "unit-md": "16px",
+                        "base": "4px",
+                        "margin-mobile": "16px",
+                        "unit-lg": "24px"
+                    },
+                    "fontFamily": {
+                        "label-bold": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-bold": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "26px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; }
+            .invoice-card { border: none !important; shadow: none !important; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col items-center">
+<!-- Top AppBar (From Shared Components) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-touch-target bg-surface border-b border-outline-variant no-print">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary Active:scale-95 transition-transform duration-100 h-touch-target w-touch-target flex items-center justify-center">menu</button>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary">TruckFixr ShopOps</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low rounded-full h-touch-target w-touch-target">search</button>
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a senior mechanic or shop manager, wearing a clean, dark blue uniform with a small emblem. The background is a slightly blurred industrial office setting with bright, natural lighting. The mood is authoritative and trustworthy, reflecting the industrial-modern aesthetic of the brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAISuE8LTE-cYhg1bZ-pGVu-WjrP8sSVOCBvIz3SytFAymmsPuCDmOVvl-DNqmObprFcr1Q012G_LSC2eJHg1AYc51w5rndtOyKxbJ9HnyQV3ArBaYv0rXfyLXby0rd53I1_nRwcd56ceEr48tql4cpgraCuAA6zVd7GEAibWY1xX8RmMnpOUCILz2gwcUK1xVYpgEoVrDUj2YPzrW5wBwp2fiUP2emvXz3qX8utneXo-V_zYEE5SIY0dnXH04ycULk9jX8NNoim_v8"/>
+</div>
+</div>
+</header>
+<!-- Navigation Drawer (Desktop Placeholder) -->
+<aside class="hidden lg:flex fixed inset-y-0 left-0 w-80 bg-surface-container flex-col p-unit-md border-r border-outline-variant z-[60] no-print">
+<div class="mb-unit-lg flex flex-col">
+<h2 class="font-headline-md text-headline-md font-bold text-primary mb-4">ShopOps</h2>
+<div class="flex items-center gap-3 p-3 bg-surface rounded-xl border border-outline-variant">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div>
+<p class="font-label-bold text-label-bold">Shop Manager</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Main Terminal</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-full transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container font-bold rounded-full" href="#">
+<span class="material-symbols-outlined">receipt_long</span> Invoices
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-full transition-colors" href="#">
+<span class="material-symbols-outlined">description</span> Estimates
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-full transition-colors" href="#">
+<span class="material-symbols-outlined">person</span> Customers
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-full transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span> Settings
+            </a>
+</nav>
+<div class="pt-4 border-t border-outline-variant">
+<p class="text-label-sm font-label-sm text-outline">v2.4.0</p>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-[1200px] mt-24 mb-32 px-margin-mobile lg:pl-96 lg:pr-8">
+<!-- Action Bar (Sticky on Mobile) -->
+<div class="flex justify-between items-center mb-6 no-print">
+<button class="flex items-center gap-2 text-primary font-label-bold" onclick="window.history.back()">
+<span class="material-symbols-outlined">arrow_back</span> Back to List
+            </button>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-6 h-touch-target border border-primary text-primary rounded-full hover:bg-surface-container-low transition-all" onclick="window.print()">
+<span class="material-symbols-outlined">print</span> Print
+                </button>
+<button class="flex items-center gap-2 px-6 h-touch-target bg-primary text-on-primary rounded-full hover:shadow-lg transition-all active:scale-95">
+<span class="material-symbols-outlined">send</span> Send Invoice
+                </button>
+</div>
+</div>
+<!-- Invoice Document (The Card) -->
+<div class="invoice-card bg-surface-container-lowest border border-outline-variant rounded-xl p-8 lg:p-12 shadow-sm min-h-[1000px]">
+<!-- Header Section -->
+<div class="flex flex-col lg:flex-row justify-between items-start gap-8 mb-12 border-b border-outline-variant pb-8">
+<!-- Left: Company Info -->
+<div class="flex gap-6"><div class="space-y-1">
+<h2 class="font-headline-lg text-headline-lg text-primary">TruckFixr Solutions LLC</h2>
+<p class="text-on-surface-variant">4822 Heavy Duty Way</p>
+<p class="text-on-surface-variant">Houston, TX 77001</p>
+<p class="text-on-surface-variant">(555) 123-4567</p>
+<p class="text-on-surface-variant">service@truckfixr.com</p>
+<p class="text-[10px] text-outline mt-2 uppercase tracking-widest">Powered by TruckFixr ShopOps</p>
+</div></div>
+<!-- Right: Invoice Metadata -->
+<div class="text-right flex flex-col items-end">
+<h1 class="font-headline-xl text-headline-xl text-primary mb-4">INVOICE</h1>
+<div class="grid grid-cols-2 gap-x-8 gap-y-1 text-left lg:text-right">
+<span class="text-outline font-label-bold">Invoice #</span>
+<span class="font-body-md text-on-surface">INV-2024-0891</span>
+<span class="text-outline font-label-bold">Date</span>
+<span class="font-body-md text-on-surface">Oct 24, 2023</span>
+<span class="text-outline font-label-bold">Due Date</span>
+<span class="font-body-md text-on-surface">Nov 08, 2023</span>
+</div>
+</div>
+</div>
+<!-- Customer & Vehicle Info -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+<!-- Customer -->
+<div class="p-6 bg-surface rounded-xl border border-outline-variant">
+<div class="flex items-center gap-2 mb-4 text-primary">
+<span class="material-symbols-outlined">person</span>
+<h3 class="font-label-bold text-label-bold uppercase tracking-wider">Customer Information</h3>
+</div>
+<div class="space-y-1">
+<p class="font-headline-md text-headline-md text-on-surface">Apex Logistics Solutions</p>
+<p class="text-on-surface-variant">Attn: Mark Reynolds</p>
+<p class="text-on-surface-variant">900 Freight Terminal Blvd</p>
+<p class="text-on-surface-variant">Dallas, TX 75201</p>
+<p class="text-on-surface-variant">mark@apexlogistics.com</p>
+</div>
+</div>
+<!-- Vehicle -->
+<div class="p-6 bg-surface rounded-xl border border-outline-variant">
+<div class="flex items-center gap-2 mb-4 text-primary">
+<span class="material-symbols-outlined">local_shipping</span>
+<h3 class="font-label-bold text-label-bold uppercase tracking-wider">Vehicle Details</h3>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<p class="text-label-sm font-label-sm text-outline">Unit #</p>
+<p class="font-label-bold">AX-9921</p>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-outline">VIN</p>
+<p class="font-label-bold">1XP...8892</p>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-outline">Make/Model</p>
+<p class="font-label-bold">2021 Peterbilt 579</p>
+</div>
+<div>
+<p class="text-label-sm font-label-sm text-outline">Mileage</p>
+<p class="font-label-bold">412,405 mi</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Line Items Table -->
+<div class="mb-12 overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high border-b border-outline">
+<th class="px-4 py-4 font-label-bold text-on-surface-variant">Description</th>
+<th class="px-4 py-4 font-label-bold text-on-surface-variant w-24">Qty/Hrs</th>
+<th class="px-4 py-4 font-label-bold text-on-surface-variant w-32">Rate</th>
+<th class="px-4 py-4 font-label-bold text-on-surface-variant text-right w-32">Amount</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr>
+<td class="px-4 py-5">
+<p class="font-label-bold text-on-surface">Labor: Brake System Replacement</p>
+<p class="text-label-sm text-on-surface-variant">Comprehensive removal and replacement of front axle S-cam brakes and slack adjusters.</p>
+</td>
+<td class="px-4 py-5 text-on-surface">6.5</td>
+<td class="px-4 py-5 text-on-surface">$145.00</td>
+<td class="px-4 py-5 text-on-surface text-right font-label-bold">$942.50</td>
+</tr>
+<tr>
+<td class="px-4 py-5">
+<p class="font-label-bold text-on-surface">Parts: Meritor Q-Plus Brake Shoe Kit</p>
+<p class="text-label-sm text-on-surface-variant">MKT4515Q - Complete axle kit with hardware.</p>
+</td>
+<td class="px-4 py-5 text-on-surface">2.0</td>
+<td class="px-4 py-5 text-on-surface">$289.00</td>
+<td class="px-4 py-5 text-on-surface text-right font-label-bold">$578.00</td>
+</tr>
+<tr class="bg-ai-highlight">
+<td class="px-4 py-5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">auto_awesome</span>
+<p class="font-label-bold text-on-surface">Shop Supplies &amp; Environmental Fee</p>
+</div>
+<p class="text-label-sm text-on-surface-variant">Standard calculated fee for cleaning agents and disposal.</p>
+</td>
+<td class="px-4 py-5 text-on-surface">1.0</td>
+<td class="px-4 py-5 text-on-surface">$45.00</td>
+<td class="px-4 py-5 text-on-surface text-right font-label-bold">$45.00</td>
+</tr>
+<tr>
+<td class="px-4 py-5">
+<p class="font-label-bold text-on-surface">Labor: DOT Inspection</p>
+<p class="text-label-sm text-on-surface-variant">Annual safety certification and documentation.</p>
+</td>
+<td class="px-4 py-5 text-on-surface">1.0</td>
+<td class="px-4 py-5 text-on-surface">$125.00</td>
+<td class="px-4 py-5 text-on-surface text-right font-label-bold">$125.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Payment & Totals Section -->
+<div class="flex flex-col lg:flex-row justify-between gap-12 pt-8 border-t-2 border-primary">
+<!-- Payment Terms -->
+<div class="flex-1 space-y-4">
+<div>
+<h4 class="font-label-bold text-label-bold text-primary mb-2">Payment Terms</h4>
+<div class="inline-block px-4 py-2 bg-secondary-container text-on-secondary-container rounded-lg font-label-bold">
+                            Net 15 Days
+                        </div>
+</div>
+<div>
+<h4 class="font-label-bold text-label-bold text-primary mb-2">Amount Due By</h4>
+<p class="font-headline-md text-headline-md">November 08, 2023</p>
+</div>
+</div>
+<!-- Totals -->
+<div class="w-full lg:w-96 space-y-3">
+<div class="flex justify-between items-center text-on-surface-variant">
+<span>Subtotal</span>
+<span class="font-body-md">$1,690.50</span>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant">
+<span>Tax (8.25%)</span>
+<span class="font-body-md">$139.47</span>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant pb-3 border-b border-outline-variant">
+<span>Adjustments</span>
+<span class="font-body-md">$0.00</span>
+</div>
+<div class="flex justify-between items-center pt-2">
+<span class="font-headline-md text-headline-md text-primary">Total Amount Due</span>
+<span class="font-headline-xl text-headline-xl text-primary">$1,829.97</span>
+</div>
+</div>
+</div>
+<!-- Footer Section -->
+<div class="mt-16 pt-8 border-t border-outline-variant">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div>
+<h4 class="font-label-bold text-label-bold mb-2">Payment Instructions</h4>
+<p class="text-on-surface-variant text-label-sm">
+                            Please make all checks payable to <span class="font-bold">TruckFixr ShopOps LLC</span>.<br/>
+                            For ACH/Wire transfers, please contact accounting@truckfixr.com for banking details.<br/>
+                            Include Invoice #INV-2024-0891 on all remittances.
+                        </p>
+</div>
+<div class="text-right">
+<h4 class="font-label-bold text-label-bold mb-2">Notice</h4>
+<p class="text-on-surface-variant text-[10px] leading-tight italic">
+                            All work is guaranteed for 90 days or 10,000 miles, whichever comes first. Vehicle storage fees of $75/day apply if not picked up within 48 hours of completion. Mechanic's lien laws apply to all unpaid balances. This document serves as a final invoice for services rendered.
+                        </p>
+</div>
+</div>
+<div class="text-center mt-12 text-outline font-label-sm">
+                    Thank you for choosing TruckFixr ShopOps—Keeping your fleet on the road.
+                </div>
+</div>
+</div>
+<!-- AI Assistant Micro-Interaction (Floating Suggestion) -->
+<div class="fixed bottom-24 right-8 w-80 bg-white border border-primary/20 shadow-2xl rounded-2xl p-6 hidden lg:block no-print animate-bounce">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm">auto_awesome</span>
+</div>
+<p class="font-label-bold text-primary">ShopOps AI Assistant</p>
+</div>
+<p class="text-body-md text-on-surface-variant">I've verified the parts inventory and applied the standard Net 15 terms based on Apex Logistics' profile.</p>
+<div class="mt-4 flex gap-2">
+<button class="flex-1 py-2 bg-surface-container-high rounded-full font-label-bold text-on-surface">Dismiss</button>
+<button class="flex-1 py-2 bg-primary text-on-primary rounded-full font-label-bold">Got it</button>
+</div>
+</div>
+</main>
+<!-- Bottom NavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface border-t border-outline-variant shadow-lg no-print">
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1">
+<span class="material-symbols-outlined">description</span>
+<span class="text-label-sm font-label-sm">Estimates</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="text-label-sm font-label-sm">Invoices</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-sm font-label-sm">Customers</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1">
+<span class="material-symbols-outlined">more_horiz</span>
+<span class="text-label-sm font-label-sm">More</span>
+</div>
+</nav>
+<script>
+        // Simple micro-interaction for rows
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', () => {
+                row.classList.toggle('bg-surface-container-low');
+            });
+        });
+        
+        // Print styling helper
+        window.onbeforeprint = function() {
+            document.body.classList.add('printing');
+        };
+        window.onafterprint = function() {
+            document.body.classList.remove('printing');
+        };
+    </script>
+</body></html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Capture - TruckFixr ShopOps</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        .active-mic {
+            animation: pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(30, 95, 168, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(30, 95, 168, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(30, 95, 168, 0); }
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed": "#ffdcc6",
+                      "surface-container": "#ededf4",
+                      "inverse-surface": "#2e3036",
+                      "on-surface-variant": "#424751",
+                      "tertiary-fixed-dim": "#ffb783",
+                      "background": "#f9f9ff",
+                      "secondary-fixed-dim": "#ffb785",
+                      "inverse-on-surface": "#f0f0f7",
+                      "primary-container": "#1e5fa8",
+                      "primary": "#004787",
+                      "on-primary": "#ffffff",
+                      "primary-fixed": "#d5e3ff",
+                      "surface-dim": "#d9dae0",
+                      "outline": "#727782",
+                      "on-secondary-container": "#673100",
+                      "outline-variant": "#c2c6d3",
+                      "surface-bright": "#f9f9ff",
+                      "on-tertiary-container": "#ffd0b0",
+                      "error": "#ba1a1a",
+                      "on-tertiary-fixed": "#301400",
+                      "surface-container-low": "#f3f3fa",
+                      "surface-variant": "#e1e2e9",
+                      "on-surface": "#191c20",
+                      "secondary-container": "#fd8f36",
+                      "on-secondary-fixed": "#301400",
+                      "ai-highlight": "#EEF4FF",
+                      "on-primary-fixed": "#001c3b",
+                      "on-secondary-fixed-variant": "#723600",
+                      "inverse-primary": "#a6c8ff",
+                      "on-error": "#ffffff",
+                      "surface-tint": "#1e5fa8",
+                      "on-primary-container": "#c5daff",
+                      "surface-container-high": "#e7e8ee",
+                      "on-error-container": "#93000a",
+                      "surface-container-highest": "#e1e2e9",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed-dim": "#a6c8ff",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-fixed-variant": "#703700",
+                      "secondary": "#954a00",
+                      "on-background": "#191c20",
+                      "on-primary-fixed-variant": "#004787",
+                      "status-alert": "#D32F2F",
+                      "status-approved": "#2E7D32",
+                      "tertiary-fixed": "#ffdcc5",
+                      "tertiary": "#713800",
+                      "status-pending": "#F2862E",
+                      "surface": "#f9f9ff",
+                      "on-secondary": "#ffffff",
+                      "surface-dark": "#121212",
+                      "tertiary-container": "#944b00",
+                      "surface-container-lowest": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "margin-desktop": "32px",
+                      "unit-md": "16px",
+                      "touch-target": "48px",
+                      "margin-mobile": "16px",
+                      "unit-lg": "24px",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "label-bold": ["Inter"],
+                      "headline-xl": ["Inter"]
+              },
+              "fontSize": {
+                      "body-lg": ["18px", {"lineHeight": "26px", "fontWeight": "400"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "label-bold": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-body-md text-on-background min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-touch-target bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-3">
+<button class="w-touch-target h-touch-target flex items-center justify-center text-primary active:scale-95 transition-transform duration-100">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">TruckFixr ShopOps</h1>
+</div>
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-primary-fixed overflow-hidden border border-outline-variant">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional profile avatar of a shop manager wearing a clean industrial uniform, set against a blurred background of a modern truck maintenance facility with soft, professional lighting and a blue and grey color scheme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBsr4MvY_YBUQvDtogEL88z_ARExQMGUEvFFnWnUFiBPAvJ9BuSC_I90MK4A9iCTw9ysUdOkLfV3RbOrlyHD4yVaFSEqT_X5SMrcD5XVzRdVWFacSzCBwEdMlBPSkGXcFN4DTiNPM75wHyWc-0PpwAi0Dm2PuDpGevO6x-zZPzubtc9ydcjy5vhdgpcpWIf2J1u8VEtALhLsQ6GAP99poFDr7GC1IyBrTP3YHrcyQpPMFtjGolqpHEdYA5YOj1UltM1MznHbJEpkm3"/>
+</div>
+</div>
+</header>
+<main class="flex-1 mt-touch-target mb-[72px] px-margin-mobile py-unit-md flex flex-col gap-unit-md max-w-2xl mx-auto w-full">
+<!-- Header with Customer/Unit -->
+<section class="bg-surface-container-lowest p-unit-md rounded-xl border border-outline-variant shadow-sm">
+<div class="flex items-start justify-between">
+<div class="flex flex-col gap-1">
+<span class="font-label-sm text-on-surface-variant uppercase tracking-wider">Active Job</span>
+<div class="flex items-center gap-2 group cursor-pointer">
+<h2 class="font-headline-md text-headline-md text-on-surface">Penske Logistics</h2>
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="edit">edit</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded-full font-label-sm">Unit #TRK-9042</span>
+<span class="text-outline-variant">|</span>
+<span class="text-on-surface-variant font-label-sm">2022 Freightliner Cascadia</span>
+</div>
+</div>
+<div class="bg-ai-highlight p-2 rounded-lg border border-primary-container/20">
+<span class="material-symbols-outlined text-primary" data-icon="auto_awesome">auto_awesome</span>
+</div>
+</div>
+</section>
+<!-- Transcription Area (Live Feed) -->
+<section class="flex-1 min-h-[160px] bg-white rounded-xl border border-outline-variant p-unit-md flex flex-col gap-3 relative overflow-hidden">
+<div class="flex items-center justify-between border-b border-surface-variant pb-2">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-status-pending animate-pulse"></div>
+<span class="font-label-bold text-on-surface-variant">AI Transcription Active</span>
+</div>
+<button class="text-primary font-label-bold">Clear All</button>
+</div>
+<div class="flex-1 overflow-y-auto font-body-md text-on-surface-variant leading-relaxed" id="transcription-container">
+<p class="mb-2">"Found coolant leak on primary radiator hose. Clamp appears corroded. Also noticing heavy wear on front-left tire tread..."</p>
+<p class="text-primary italic animate-pulse">Listening for more details...</p>
+</div>
+<!-- Visualizer Placeholder -->
+<div class="h-8 flex items-center justify-center gap-1">
+<div class="w-1 h-3 bg-primary rounded-full"></div>
+<div class="w-1 h-6 bg-primary rounded-full"></div>
+<div class="w-1 h-4 bg-primary rounded-full"></div>
+<div class="w-1 h-8 bg-primary rounded-full"></div>
+<div class="w-1 h-5 bg-primary rounded-full"></div>
+<div class="w-1 h-2 bg-primary rounded-full"></div>
+</div>
+</section>
+<!-- Central Capture Area -->
+<section class="grid grid-cols-2 gap-4">
+<!-- Main Voice Action -->
+<button class="col-span-2 h-[120px] bg-primary text-on-primary rounded-xl flex flex-col items-center justify-center gap-2 shadow-lg active:scale-95 transition-all duration-200" id="mic-btn">
+<div class="w-14 h-14 bg-on-primary/10 rounded-full flex items-center justify-center relative">
+<span class="material-symbols-outlined text-[36px]" data-icon="mic" style="font-variation-settings: 'FILL' 1;">mic</span>
+</div>
+<span class="font-headline-md">Speak Description</span>
+</button>
+<!-- Secondary Actions -->
+<button class="h-touch-target bg-surface-container-high text-on-surface border border-outline-variant rounded-xl flex items-center justify-center gap-3 active:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="photo_camera">photo_camera</span>
+<span class="font-label-bold">Add Photo</span>
+</button>
+<button class="h-touch-target bg-surface-container-high text-on-surface border border-outline-variant rounded-xl flex items-center justify-center gap-3 active:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="keyboard">keyboard</span>
+<span class="font-label-bold">Type Manually</span>
+</button>
+</section>
+<!-- AI Recommendations (Preview) -->
+<section class="bg-ai-highlight p-unit-md rounded-xl border border-primary-container/20">
+<h3 class="font-label-bold text-primary mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="bolt">bolt</span>
+                AI SUGGESTED LINE ITEMS
+            </h3>
+<div class="space-y-2">
+<div class="flex items-center justify-between bg-white/60 p-3 rounded-lg border border-primary-container/10">
+<div class="flex flex-col">
+<span class="font-label-bold text-on-surface">Radiator Hose Replacement</span>
+<span class="text-label-sm text-on-surface-variant">Parts: $42.50 | Labor: 0.5hr</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-status-approved text-white">
+<span class="material-symbols-outlined" data-icon="check">check</span>
+</button>
+</div>
+<div class="flex items-center justify-between bg-white/60 p-3 rounded-lg border border-primary-container/10">
+<div class="flex flex-col">
+<span class="font-label-bold text-on-surface">Tire Rotation &amp; Alignment</span>
+<span class="text-label-sm text-on-surface-variant">Labor: 1.2hr</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-status-approved text-white">
+<span class="material-symbols-outlined" data-icon="check">check</span>
+</button>
+</div>
+</div>
+<button class="w-full mt-3 py-3 text-primary font-label-bold flex items-center justify-center gap-1 border-t border-primary-container/10">
+                Generate Full Estimate <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface border-t border-outline-variant shadow-lg rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant rounded-full transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 active:opacity-80 scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="description" style="font-variation-settings: 'FILL' 1;">description</span>
+<span class="font-label-sm text-label-sm">Estimates</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant rounded-full transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm">Invoices</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant rounded-full transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Customers</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant rounded-full transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+<span class="font-label-sm text-label-sm">More</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for the record button
+        const micBtn = document.getElementById('mic-btn');
+        const transContainer = document.getElementById('transcription-container');
+        let isRecording = false;
+
+        micBtn.addEventListener('click', () => {
+            isRecording = !isRecording;
+            if (isRecording) {
+                micBtn.classList.add('active-mic', 'ring-4', 'ring-primary/20');
+                micBtn.querySelector('span:last-child').textContent = 'Recording...';
+                // Fake transcription feedback
+                const newText = document.createElement('p');
+                newText.className = 'text-primary font-medium animate-pulse mt-1';
+                newText.textContent = 'Transcribing voice input...';
+                transContainer.appendChild(newText);
+            } else {
+                micBtn.classList.remove('active-mic', 'ring-4', 'ring-primary/20');
+                micBtn.querySelector('span:last-child').textContent = 'Speak Description';
+                // Stop fake transcription
+                const pulses = transContainer.querySelectorAll('.animate-pulse');
+                pulses.forEach(p => {
+                    if(p.textContent.includes('Transcribing')) {
+                         p.textContent = '"Check fuel filter housing for cracks near the inlet port."';
+                         p.classList.remove('animate-pulse', 'text-primary');
+                         p.classList.add('text-on-surface-variant');
+                    }
+                });
+            }
+        });
+
+        // Simple scale interaction for all buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => btn.classList.add('scale-95'));
+            btn.addEventListener('mouseup', () => btn.classList.remove('scale-95'));
+            btn.addEventListener('mouseleave', () => btn.classList.remove('scale-95'));
+        });
+    </script>
+</body></html>

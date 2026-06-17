@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Estimate Approval | TruckFixr ShopOps</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#ffdcc6",
+                        "surface-container": "#ededf4",
+                        "inverse-surface": "#2e3036",
+                        "on-surface-variant": "#424751",
+                        "tertiary-fixed-dim": "#ffb783",
+                        "background": "#f9f9ff",
+                        "secondary-fixed-dim": "#ffb785",
+                        "inverse-on-surface": "#f0f0f7",
+                        "primary-container": "#1e5fa8",
+                        "primary": "#004787",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#d5e3ff",
+                        "surface-dim": "#d9dae0",
+                        "outline": "#727782",
+                        "on-secondary-container": "#673100",
+                        "outline-variant": "#c2c6d3",
+                        "surface-bright": "#f9f9ff",
+                        "on-tertiary-container": "#ffd0b0",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed": "#301400",
+                        "surface-container-low": "#f3f3fa",
+                        "surface-variant": "#e1e2e9",
+                        "on-surface": "#191c20",
+                        "secondary-container": "#fd8f36",
+                        "on-secondary-fixed": "#301400",
+                        "ai-highlight": "#EEF4FF",
+                        "on-primary-fixed": "#001c3b",
+                        "on-secondary-fixed-variant": "#723600",
+                        "inverse-primary": "#a6c8ff",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#1e5fa8",
+                        "on-primary-container": "#c5daff",
+                        "surface-container-high": "#e7e8ee",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e1e2e9",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#a6c8ff",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#703700",
+                        "secondary": "#954a00",
+                        "on-background": "#191c20",
+                        "on-primary-fixed-variant": "#004787",
+                        "status-alert": "#D32F2F",
+                        "status-approved": "#2E7D32",
+                        "tertiary-fixed": "#ffdcc5",
+                        "tertiary": "#713800",
+                        "status-pending": "#F2862E",
+                        "surface": "#f9f9ff",
+                        "on-secondary": "#ffffff",
+                        "surface-dark": "#121212",
+                        "tertiary-container": "#944b00",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "margin-desktop": "32px",
+                        "unit-md": "16px",
+                        "touch-target": "48px",
+                        "margin-mobile": "16px",
+                        "unit-lg": "24px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-bold": ["Inter"],
+                        "headline-xl": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "26px", "fontWeight": "400"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "label-bold": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .approval-card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- Top AppBar (Simplified for Customer View) -->
+<header class="fixed top-0 left-0 w-full z-50 bg-surface border-b border-outline-variant flex justify-between items-center px-margin-mobile md:px-margin-desktop h-touch-target">
+<div class="flex items-center gap-3">
+<img alt="TruckFixr ShopOps Logo" class="w-8 h-8 rounded-lg object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjxxC4BYbmmouoVdnmacS0lODEwV_GyS_De8yVyBNGDSvIkPNn-7PXl876mQqZkiei3NHslyMROJhYc89F5JavpTANVeVVctIjDAqNmsI5c9RKBASBsIpwUm6Ned3cZQXQlwbMB0dDffBNz5IJjWXICInCfEW9k5mSwYd-PG8N7k05h4R4hkHC5AgpNRFKBRAXzNjmpNuMEWV-QFahzyzeHCudc4hAPZmvJM7Mxr8jzZ-3XNAarhpSQhgIVWzUWIE-7M16Vix-j0UM"/>
+<h1 class="font-headline-md text-headline-md text-primary truncate">TruckFixr ShopOps</h1>
+</div>
+<div class="flex items-center">
+<button class="flex items-center gap-1 text-primary font-label-bold text-label-bold px-3 py-2 rounded-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[20px]">download</span>
+<span class="hidden sm:inline">Download PDF</span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-grow pt-[64px] pb-32 px-margin-mobile md:px-0">
+<div class="max-w-[800px] mx-auto mt-8">
+<!-- Header Section -->
+<div class="mb-8 text-center md:text-left">
+<span class="inline-block px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-label-sm mb-4">
+                    ESTIMATE #EST-4920
+                </span>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-2">Service Estimate</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Review the proposed repairs and parts for your vehicle below.</p>
+</div>
+<!-- Details Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+<!-- Customer Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-unit-md approval-card-shadow">
+<div class="flex items-center gap-3 mb-4 text-primary">
+<span class="material-symbols-outlined">person</span>
+<h3 class="font-label-bold text-label-bold">Customer Details</h3>
+</div>
+<p class="font-headline-md text-headline-md text-on-surface mb-1">Apex Logistics Inc.</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Attn: James Miller</p>
+<p class="font-body-md text-body-md text-on-surface-variant">jmiller@apexlogistics.com</p>
+</div>
+<!-- Vehicle Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-unit-md approval-card-shadow">
+<div class="flex items-center gap-3 mb-4 text-primary">
+<span class="material-symbols-outlined">local_shipping</span>
+<h3 class="font-label-bold text-label-bold">Vehicle Info</h3>
+</div>
+<p class="font-headline-md text-headline-md text-on-surface mb-1">2021 Freightliner Cascadia</p>
+<p class="font-body-md text-body-md text-on-surface-variant">VIN: 1FUJBBDR5MLXXXXXX</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Unit: #402 | Mileage: 245,302</p>
+</div>
+</div>
+<!-- Line Items Table -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden approval-card-shadow mb-8">
+<div class="bg-surface-container-low px-unit-md py-3 border-b border-outline-variant">
+<h3 class="font-label-bold text-label-bold text-on-surface">Repair Breakdown</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full border-collapse">
+<thead>
+<tr class="text-left border-b border-outline-variant bg-surface-container-lowest">
+<th class="px-unit-md py-4 font-label-bold text-label-sm text-on-surface-variant uppercase tracking-wider">Description</th>
+<th class="px-unit-md py-4 font-label-bold text-label-sm text-on-surface-variant text-right uppercase tracking-wider">Qty/Hrs</th>
+<th class="px-unit-md py-4 font-label-bold text-label-sm text-on-surface-variant text-right uppercase tracking-wider">Price</th>
+<th class="px-unit-md py-4 font-label-bold text-label-sm text-on-surface-variant text-right uppercase tracking-wider">Total</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Item 1 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-unit-md py-5">
+<p class="font-label-bold text-on-surface mb-1">Engine Diagnostic &amp; Inspection</p>
+<p class="font-body-md text-sm text-on-surface-variant">Full system scan and mechanical inspection for coolant leak.</p>
+</td>
+<td class="px-unit-md py-5 text-right font-body-md text-on-surface">2.0</td>
+<td class="px-unit-md py-5 text-right font-body-md text-on-surface">$165.00</td>
+<td class="px-unit-md py-5 text-right font-label-bold text-on-surface">$330.00</td>
+</tr>
+<!-- Item 2 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-unit-md py-5">
+<p class="font-label-bold text-on-surface mb-1">Water Pump Assembly</p>
+<p class="font-body-md text-sm text-on-surface-variant">OEM Replacement (A4722001601)</p>
+</td>
+<td class="px-unit-md py-5 text-right font-body-md text-on-surface">1.0</td>
+<td class="px-unit-md py-5 text-right font-body-md text-on-surface">$842.50</td>
+<td class="px-unit-md py-5 text-right font-label-bold text-on-surface">$842.50</td>
+</tr>
+<!-- Item 3 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-unit-md py-5">
+<p class="font-label-bold text-on-surface mb-1">Labor: Coolant System Overhaul</p>
+<p class="font-body-md text-sm text-on-surface-variant">Drain, replace pump, flush, and refill with extended life coolant.</p>
+</td>
+<td class="px-unit-md py-5 text-right font-body-md text-on-surface">4.5</td>
+<td class="px-unit-md py-5 text-right font-body-md text-on-surface">$165.00</td>
+<td class="px-unit-md py-5 text-right font-label-bold text-on-surface">$742.50</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Totals Section -->
+<div class="bg-surface-container-low p-unit-md">
+<div class="flex flex-col gap-2 max-w-[300px] ml-auto">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-on-surface-variant">Subtotal</span>
+<span class="font-body-md text-on-surface">$1,915.00</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-on-surface-variant">Tax (8.25%)</span>
+<span class="font-body-md text-on-surface">$158.00</span>
+</div>
+<div class="flex justify-between items-center pt-2 mt-2 border-t border-outline">
+<span class="font-label-bold text-headline-md text-on-surface">Total Amount</span>
+<span class="font-label-bold text-headline-md text-primary">$2,073.00</span>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Insight / Note Section -->
+<div class="bg-ai-highlight border border-primary-fixed rounded-xl p-unit-md mb-8 flex gap-4">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">info</span>
+<div>
+<h4 class="font-label-bold text-on-primary-fixed-variant mb-1">Service Advisor's Note</h4>
+<p class="font-body-md text-on-surface-variant">"We've identified a primary failure in the water pump seal. Replacing now prevents catastrophic overheating. All parts quoted are OEM Freightliner for maximum durability." — <span class="font-medium">Mike R., Shop Foreman</span></p>
+</div>
+</div>
+<!-- Media/Photo Proof -->
+<div class="mb-8">
+<h3 class="font-label-bold text-on-surface mb-4">Inspection Documentation</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="aspect-square rounded-lg overflow-hidden border border-outline-variant group cursor-pointer relative">
+<img class="w-full h-full object-cover transition-transform group-hover:scale-105" data-alt="A detailed, close-up photograph of a heavy-duty diesel engine block showing a visible coolant leak around a metallic seal. The lighting is crisp and industrial, highlighting the wet textures of the coolant against the weathered metal surface. The composition is focused and professional, capturing mechanical wear with technical precision in a bright repair shop environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_CjU5PpUyC649Ud_3lbteHN3QpeQpWlSjoVu3vtt4513k-9N5DaM9rpvmpPWvKD0ldyOI5x9VMDvsU0Bpc5O55998fha8sH5dCwE2zSuZJbIhwK1BkV5Npj7P75WGEdeZFnAXibAKRRzoLfVhzn-HL7s2nbGR7TLpX2RL0zriBPacDy59aVbAu6zfQMVESaetx08hPC63yO_C6H3PMW0Q8VwqxthkCqaqpi0kBp3axbr-nxKfauom9sx_7faHd3XFl9BJed_XzhRe"/>
+<div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white">zoom_in</span>
+</div>
+</div>
+<div class="aspect-square rounded-lg overflow-hidden border border-outline-variant group cursor-pointer relative">
+<img class="w-full h-full object-cover transition-transform group-hover:scale-105" data-alt="Macro view of a worn-out mechanical component from a truck's cooling system placed on a clean white workshop table. Soft daylight from a nearby window illuminates the corrosion and thermal damage on the part. The style is clear and informative, emphasizing the need for replacement through realistic textures and high-contrast detail in a modern industrial setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfZvcBJWInRuI-3EYBUtRKMHFXIpTvoeDED7mXxCdtgJRzhtQ4oBrZWAoBfzkcoq4yDMUx8TotBtpYhbBhHd9iGAHZ0O6hxMsjgYpEoV3WA_iP985NkXccqO5v9nxwnnGfy4hggYLvDgb5aRAuEE5sqmO7Rv1gkYa1_5ORMmmnHUqbsBkY-ZXlpKdSCz5eLllpXo2FskqMTd0Eg2wl4u6d4P69obDlUlog6C3leSQahd6e3Yt-6NUmpzSlQ2JM9xSOfDY8OPq5tNKU"/>
+<div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white">zoom_in</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Fixed Actions -->
+<section class="fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-outline-variant p-4 md:p-6 z-[60] approval-card-shadow">
+<div class="max-w-[800px] mx-auto flex flex-col md:flex-row gap-4">
+<button class="flex-1 h-touch-target border-2 border-error text-error font-label-bold rounded-xl flex items-center justify-center gap-2 hover:bg-error-container transition-all active:scale-95" id="declineBtn">
+<span class="material-symbols-outlined">close</span>
+                Decline Estimate
+            </button>
+<button class="flex-[2] h-touch-target bg-status-approved text-white font-label-bold rounded-xl flex items-center justify-center gap-2 hover:brightness-110 shadow-md transition-all active:scale-95" id="approveBtn">
+<span class="material-symbols-outlined">check_circle</span>
+                Approve &amp; Start Repairs
+            </button>
+</div>
+</section>
+<!-- Success Feedback Overlay (Hidden by Default) -->
+<div class="fixed inset-0 bg-on-surface/60 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-6" id="successOverlay">
+<div class="bg-surface-container-lowest rounded-2xl p-unit-lg max-w-sm w-full text-center shadow-2xl scale-95 transition-transform duration-300" id="successModal">
+<div class="w-16 h-16 bg-status-approved rounded-full flex items-center justify-center mx-auto mb-6 text-white">
+<span class="material-symbols-outlined text-[40px]">check</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg mb-2">Estimate Approved</h3>
+<p class="font-body-md text-on-surface-variant mb-8">Work has been scheduled. You'll receive real-time updates as repairs progress.</p>
+<button class="w-full h-touch-target bg-primary text-white font-label-bold rounded-xl" onclick="document.getElementById('successOverlay').classList.add('hidden')">
+                Return to Dashboard
+            </button>
+</div>
+</div>
+<script>
+        const approveBtn = document.getElementById('approveBtn');
+        const declineBtn = document.getElementById('declineBtn');
+        const successOverlay = document.getElementById('successOverlay');
+        const successModal = document.getElementById('successModal');
+
+        approveBtn.addEventListener('click', () => {
+            successOverlay.classList.remove('hidden');
+            successOverlay.classList.add('flex');
+            setTimeout(() => {
+                successModal.classList.remove('scale-95');
+                successModal.classList.add('scale-100');
+            }, 10);
+        });
+
+        declineBtn.addEventListener('click', () => {
+            if(confirm('Are you sure you want to decline this estimate? Declining may delay your vehicle\'s return-to-service time.')) {
+                alert('Estimate Declined. A service advisor will contact you shortly to discuss other options.');
+            }
+        });
+
+        // Simple scroll behavior for header shadow
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-md');
+            } else {
+                header.classList.remove('shadow-md');
+            }
+        });
+    </script>
+</body></html>
