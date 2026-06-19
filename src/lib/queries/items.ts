@@ -1,5 +1,6 @@
 import { ItemType } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { getItemOptionsLive } from "@/lib/live-records";
 
 export async function getItems(companyId: string, type?: ItemType, search?: string) {
   return prisma.item.findMany({
@@ -26,19 +27,5 @@ export async function getItem(id: string, companyId: string) {
 
 /** Items for the line-editor picker — enough to prefill a document line. */
 export async function getItemOptions(companyId: string) {
-  return prisma.item.findMany({
-    where: { companyId },
-    select: {
-      id: true,
-      type: true,
-      name: true,
-      partNumber: true,
-      sellPrice: true,
-      cost: true,
-      defaultRate: true,
-      defaultTime: true,
-      taxable: true,
-    },
-    orderBy: [{ type: "asc" }, { name: "asc" }],
-  });
+  return getItemOptionsLive(companyId);
 }

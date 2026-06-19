@@ -1,10 +1,43 @@
 import { NextResponse } from "next/server";
 import { getSessionContext } from "@/lib/rls";
-import { prisma } from "@/lib/prisma";
+import { createAdminClient } from "@/lib/supabase/server";
 import { toNum } from "@/lib/money";
+import type { Numeric } from "@/lib/money";
 import type { RefCustomer, RefItem } from "@/lib/offline/doc-types";
 
 export const runtime = "nodejs";
+
+type CustomerRow = {
+  id: string;
+  name: string;
+  companyName: string | null;
+  taxExempt: boolean;
+  vehicles: Array<{
+    id: string;
+    unitNumber: string | null;
+    year: number | null;
+    make: string | null;
+    model: string | null;
+    plate: string | null;
+    createdAt: string | null;
+  }> | null;
+};
+
+type ItemRow = {
+  id: string;
+  type: RefItem["type"];
+  name: string;
+  partNumber: string | null;
+  sellPrice: unknown;
+  defaultRate: unknown;
+  defaultTime: unknown;
+  taxable: boolean;
+};
+
+type TaxRateRow = {
+  rate: unknown;
+  isDefault: boolean | null;
+};
 
 /** Snapshot of customers/vehicles/items/tax rate for offline document editing. */
 export async function GET() {
@@ -15,51 +48,74 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const [customers, items, taxRate] = await Promise.all([
-    prisma.customer.findMany({
-      where: { companyId },
-      select: {
-        id: true,
-        name: true,
-        companyName: true,
-        taxExempt: true,
-        vehicles: { select: { id: true, unitNumber: true, year: true, make: true, model: true, plate: true }, orderBy: { createdAt: "desc" } },
-      },
-      orderBy: { name: "asc" },
-    }),
-    prisma.item.findMany({
-      where: { companyId },
-      select: { id: true, type: true, name: true, partNumber: true, sellPrice: true, defaultRate: true, defaultTime: true, taxable: true },
-      orderBy: [{ type: "asc" }, { name: "asc" }],
-      take: 300,
-    }),
-    prisma.taxRate.findFirst({ where: { companyId, isDefault: true } }),
+  const admin = createAdminClient();
+  const [customersResult, itemsResult, taxRatesResult] = await Promise.all([
+    admin
+      .from("customers")
+      .select("id,name,companyName,taxExempt,vehicles(id,unitNumber,year,make,model,plate,createdAt)")
+      .eq("companyId", companyId)
+      .order("name", { ascending: true }),
+    admin
+      .from("items")
+      .select("id,type,name,partNumber,sellPrice,defaultRate,defaultTime,taxable")
+      .eq("companyId", companyId)
+      .order("type", { ascending: true })
+      .order("name", { ascending: true })
+      .limit(300),
+    admin.from("tax_rates").select("rate,isDefault").eq("companyId", companyId),
   ]);
 
-  const refCustomers: RefCustomer[] = customers.map((c) => ({
-    id: c.id,
-    name: c.name,
-    companyName: c.companyName,
-    taxExempt: c.taxExempt,
-    vehicles: c.vehicles.map((v) => ({
-      id: v.id,
-      label: ([v.year, v.make, v.model].filter(Boolean).join(" ") || "Vehicle") + (v.unitNumber ? ` · #${v.unitNumber}` : v.plate ? ` · ${v.plate}` : ""),
-    })),
+  if (customersResult.error) {
+    return NextResponse.json({ error: customersResult.error.message }, { status: 500 });
+  }
+
+  if (itemsResult.error) {
+    return NextResponse.json({ error: itemsResult.error.message }, { status: 500 });
+  }
+
+  if (taxRatesResult.error) {
+    return NextResponse.json({ error: taxRatesResult.error.message }, { status: 500 });
+  }
+
+  const customers = (customersResult.data ?? []) as CustomerRow[];
+  const items = (itemsResult.data ?? []) as ItemRow[];
+  const taxRate = ((taxRatesResult.data ?? []) as TaxRateRow[]).sort(
+    (a, b) => Number(Boolean(b.isDefault)) - Number(Boolean(a.isDefault))
+  )[0];
+
+  const refCustomers: RefCustomer[] = customers.map((customer) => ({
+    id: customer.id,
+    name: customer.name,
+    companyName: customer.companyName,
+    taxExempt: customer.taxExempt,
+    vehicles: [...(customer.vehicles ?? [])]
+      .sort((a, b) => {
+        const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return bTime - aTime;
+      })
+      .map((vehicle) => ({
+        id: vehicle.id,
+        label:
+          ([vehicle.year, vehicle.make, vehicle.model].filter(Boolean).join(" ") || "Vehicle") +
+          (vehicle.unitNumber ? ` - #${vehicle.unitNumber}` : vehicle.plate ? ` - ${vehicle.plate}` : ""),
+      })),
   }));
 
-  const refItems: RefItem[] = items.map((i) => ({
-    id: i.id,
-    type: i.type,
-    name: i.name,
-    partNumber: i.partNumber,
-    unitPrice: i.type === "labour" ? toNum(i.defaultRate) : toNum(i.sellPrice),
-    defaultQty: i.type === "labour" ? toNum(i.defaultTime) || 1 : 1,
-    taxable: i.taxable,
+  const refItems: RefItem[] = items.map((item) => ({
+    id: item.id,
+    type: item.type,
+    name: item.name,
+    partNumber: item.partNumber,
+    unitPrice:
+      item.type === "labour" ? toNum(item.defaultRate as Numeric) : toNum(item.sellPrice as Numeric),
+    defaultQty: item.type === "labour" ? toNum(item.defaultTime as Numeric) || 1 : 1,
+    taxable: item.taxable,
   }));
 
   return NextResponse.json({
     customers: refCustomers,
     items: refItems,
-    taxRate: taxRate ? toNum(taxRate.rate) : 0,
+    taxRate: taxRate ? toNum(taxRate.rate as Numeric) : 0,
   });
 }

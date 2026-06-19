@@ -1,5 +1,5 @@
-import type { Company } from "@prisma/client";
 import { PROVINCE_TAX } from "@/lib/constants";
+import { extractGstHstNumber, stripGstHstNumber } from "@/lib/company-doc-settings";
 import { toNum } from "@/lib/money";
 import type { PrintDocProps, PrintCompany } from "@/components/documents/print-document";
 
@@ -9,20 +9,35 @@ const ESTIMATE_STATUS_LABEL: Record<string, string> = {
 const INVOICE_STATUS_LABEL: Record<string, string> = {
   draft: "Draft", sent: "Sent", paid: "Paid", partially_paid: "Partially paid", overdue: "Overdue", void: "Void",
 };
+const LINE_TYPE_ORDER: Record<string, number> = { labour: 0, part: 1, fee: 2 };
 
-function companyToPrint(company: Company): PrintCompany {
+type DateLike = Date | string | number | null;
+
+interface CompanyLike {
+  name: string;
+  province: string;
+  address: string | null;
+  phone: string | null;
+  email: string | null;
+  logoUrl: string | null;
+  termsText: string | null;
+  warrantyText: string | null;
+}
+
+function companyToPrint(company: CompanyLike): PrintCompany {
   return {
     name: company.name,
     address: company.address,
     phone: company.phone,
     email: company.email,
     logoUrl: company.logoUrl,
-    termsText: company.termsText,
+    gstHstNumber: extractGstHstNumber(company.termsText),
+    termsText: stripGstHstNumber(company.termsText),
     warrantyText: company.warrantyText,
   };
 }
 
-function taxLabelFor(company: Company): string {
+function taxLabelFor(company: CompanyLike): string {
   const tax = PROVINCE_TAX[company.province] ?? PROVINCE_TAX["ON"];
   return `${tax.name} (${Math.round(tax.rate * 100)}%)`;
 }
@@ -38,8 +53,8 @@ interface LineLike {
 interface EstimateLike {
   estimateNumber: string;
   status: string;
-  createdAt: Date;
-  expiryDate: Date | null;
+  createdAt: DateLike;
+  expiryDate: DateLike;
   complaint: string | null;
   recommendedWork: string | null;
   customerNotes: string | null;
@@ -54,8 +69,8 @@ interface EstimateLike {
 interface InvoiceLike {
   invoiceNumber: string;
   status: string;
-  invoiceDate: Date;
-  dueDate: Date | null;
+  invoiceDate: DateLike;
+  dueDate: DateLike;
   paymentTerms: string | null;
   customerNotes: string | null;
   subtotal: unknown;
@@ -87,13 +102,15 @@ interface VehicleLike {
 }
 
 function mapLines(lines: LineLike[]) {
-  return lines.map((l) => ({
-    type: l.type,
-    description: l.description,
-    quantity: toNum(l.quantity as never),
-    unitPrice: toNum(l.unitPrice as never),
-    total: toNum(l.total as never),
-  }));
+  return [...lines]
+    .sort((a, b) => (LINE_TYPE_ORDER[a.type] ?? 9) - (LINE_TYPE_ORDER[b.type] ?? 9))
+    .map((l) => ({
+      type: l.type,
+      description: l.description,
+      quantity: toNum(l.quantity as never),
+      unitPrice: toNum(l.unitPrice as never),
+      total: toNum(l.total as never),
+    }));
 }
 
 function mapVehicle(v: VehicleLike | null) {
@@ -104,7 +121,7 @@ function mapVehicle(v: VehicleLike | null) {
   };
 }
 
-export function buildEstimatePrint(e: EstimateLike, company: Company): PrintDocProps {
+export function buildEstimatePrint(e: EstimateLike, company: CompanyLike): PrintDocProps {
   return {
     kind: "estimate",
     company: companyToPrint(company),
@@ -131,7 +148,7 @@ export function buildEstimatePrint(e: EstimateLike, company: Company): PrintDocP
   };
 }
 
-export function buildInvoicePrint(i: InvoiceLike, company: Company): PrintDocProps {
+export function buildInvoicePrint(i: InvoiceLike, company: CompanyLike): PrintDocProps {
   return {
     kind: "invoice",
     company: companyToPrint(company),

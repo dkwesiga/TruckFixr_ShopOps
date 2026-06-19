@@ -5,14 +5,11 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import type { Prisma, ItemType } from "@prisma/client";
 import { getSessionContext, withRLS } from "@/lib/rls";
-import {
-  nextEstimateNumber,
-  recalcEstimateTotals,
-} from "@/lib/documents";
-import { resolveDocumentStart } from "@/lib/actions/document-start";
+import { recalcEstimateTotals } from "@/lib/documents";
 import { lineTotal } from "@/lib/money";
 import { emailEnabled } from "@/lib/email/config";
 import { dispatchEstimateEmail } from "@/lib/email/dispatch";
+import { createEstimateLive, sendEstimateLive } from "@/lib/live-records";
 
 const APPROVAL_LINK_TTL_DAYS = 30;
 
@@ -36,25 +33,8 @@ async function tryEmail(fn: () => Promise<"sent" | "no-email">): Promise<string>
 // ---------------------------------------------------------------------------
 
 export async function createEstimate(formData: FormData): Promise<void> {
-  const { userId, companyId } = await getSessionContext();
-
-  const estimate = await withRLS(userId, companyId, async (tx) => {
-    const { customerId, vehicleId } = await resolveDocumentStart(tx, companyId, formData, "/estimates/new");
-    const company = await tx.company.findUnique({
-      where: { id: companyId },
-      select: { numberingPrefix: true },
-    });
-    return tx.estimate.create({
-      data: {
-        companyId,
-        estimateNumber: await nextEstimateNumber(tx, companyId, company?.numberingPrefix),
-        customerId,
-        vehicleId,
-        complaint: str(formData.get("complaint")),
-        recommendedWork: str(formData.get("recommendedWork")),
-      },
-    });
-  });
+  const { companyId } = await getSessionContext();
+  const estimate = await createEstimateLive(companyId, formData);
 
   revalidatePath("/estimates");
   redirect(`/estimates/${estimate.id}`);
@@ -169,17 +149,12 @@ export async function deleteEstimateLine(formData: FormData): Promise<void> {
 // ---------------------------------------------------------------------------
 
 export async function sendEstimate(id: string): Promise<void> {
-  const { userId, companyId } = await getSessionContext();
-  await withRLS(userId, companyId, (tx) =>
-    tx.estimate.update({
-      where: { id, companyId },
-      data: {
-        status: "sent",
-        sentAt: new Date(),
-        approvalToken: randomBytes(24).toString("hex"),
-        approvalTokenExpiresAt: addDays(new Date(), APPROVAL_LINK_TTL_DAYS),
-      },
-    })
+  const { companyId } = await getSessionContext();
+  await sendEstimateLive(
+    companyId,
+    id,
+    randomBytes(24).toString("hex"),
+    addDays(new Date(), APPROVAL_LINK_TTL_DAYS)
   );
   const notice = await tryEmail(() => dispatchEstimateEmail(id, companyId));
   revalidatePath(`/estimates/${id}`);

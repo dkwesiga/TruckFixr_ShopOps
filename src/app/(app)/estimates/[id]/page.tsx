@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { prisma } from "@/lib/prisma";
 import { getEstimate } from "@/lib/queries/estimates";
 import { getItemOptions } from "@/lib/queries/items";
 import { PageHeader } from "@/components/layout/page-header";
@@ -28,6 +27,16 @@ import {
   deleteEstimate,
 } from "@/lib/actions/estimates";
 import { convertEstimateToInvoice } from "@/lib/actions/invoices";
+import { getDbUserById } from "@/lib/live-records";
+
+const DATE_FORMATTER = new Intl.DateTimeFormat("en-CA", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+});
+const PREVIEW_LINK_CLASS =
+  "inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-[#c2c6d3] bg-white px-5 py-3 text-base font-semibold text-[#004787] transition-colors hover:bg-[#f1f3f9] active:bg-[#e8ebf3]";
+const LINE_TYPE_ORDER: Record<string, number> = { labour: 0, part: 1, fee: 2 };
 
 export default async function EstimateDetailPage({
   params,
@@ -42,7 +51,7 @@ export default async function EstimateDetailPage({
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id }, select: { companyId: true } });
+  const dbUser = await getDbUserById(user.id);
   if (!dbUser) redirect("/onboarding");
 
   const estimate = await getEstimate(id, dbUser.companyId);
@@ -53,17 +62,19 @@ export default async function EstimateDetailPage({
   const locked = !(estimate.status === "draft" || estimate.status === "sent");
   const hasLines = estimate.lines.length > 0;
 
-  const lines: LineView[] = estimate.lines.map((l) => ({
-    id: l.id,
-    type: l.type,
-    description: l.description,
-    quantity: toNum(l.quantity),
-    unitPrice: toNum(l.unitPrice),
-    total: toNum(l.total),
-    taxable: l.taxable,
-    aiSuggested: l.aiSuggested,
-    isVariance: false,
-  }));
+  const lines: LineView[] = estimate.lines
+    .map((l) => ({
+      id: l.id,
+      type: l.type,
+      description: l.description,
+      quantity: toNum(l.quantity),
+      unitPrice: toNum(l.unitPrice),
+      total: toNum(l.total),
+      taxable: l.taxable,
+      aiSuggested: l.aiSuggested,
+      isVariance: false,
+    }))
+    .sort((a, b) => (LINE_TYPE_ORDER[a.type] ?? 9) - (LINE_TYPE_ORDER[b.type] ?? 9));
 
   const items: ItemOption[] = itemsRaw.map((i) => ({
     id: i.id,
@@ -90,7 +101,7 @@ export default async function EstimateDetailPage({
         backHref="/estimates"
         action={
           <div className="flex items-center gap-1">
-            <Link href={`/print/estimate/${id}`} className="text-sm text-[#004787] font-medium px-2 py-1">PDF</Link>
+            <Link href={`/print/estimate/${id}`} className="text-sm text-[#004787] font-medium px-2 py-1">Preview</Link>
             {!locked && <Link href={`/estimates/${id}/edit`} className="text-sm text-[#004787] font-medium px-2 py-1">Edit</Link>}
           </div>
         }
@@ -197,11 +208,22 @@ export default async function EstimateDetailPage({
         <div className="space-y-2 pt-1">
           {estimate.status === "draft" && (
             <>
-              <form action={sendEstimate.bind(null, id)}>
-                <Button type="submit" size="lg" className="w-full" disabled={!hasLines}>
-                  Send for approval
-                </Button>
-              </form>
+              <div className="grid grid-cols-2 gap-2">
+                <Link href={`/print/estimate/${id}`} className={PREVIEW_LINK_CLASS}>
+                  Preview estimate
+                </Link>
+                <form action={sendEstimate.bind(null, id)}>
+                  <ConfirmSubmit
+                    message="Send this estimate for approval now? Preview it first if you have not reviewed it."
+                    variant="primary"
+                    size="lg"
+                    className="w-full"
+                    disabled={!hasLines}
+                  >
+                    Send for approval
+                  </ConfirmSubmit>
+                </form>
+              </div>
               {!hasLines && <p className="text-xs text-[#858b98] text-center">Add at least one line to send.</p>}
               <form action={markEstimateApproved.bind(null, id)}>
                 <Button type="submit" variant="secondary" size="md" className="w-full" disabled={!hasLines}>
@@ -275,6 +297,8 @@ function Chevron() {
   );
 }
 
-function fmtDate(d: Date): string {
-  return new Intl.DateTimeFormat("en-CA", { month: "short", day: "numeric", year: "numeric" }).format(d);
+function fmtDate(value: Date | string | number | null | undefined): string {
+  const date = value instanceof Date ? value : value ? new Date(value) : null;
+  if (!date || Number.isNaN(date.getTime())) return "Unknown date";
+  return DATE_FORMATTER.format(date);
 }

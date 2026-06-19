@@ -16,12 +16,14 @@ export function ConfirmSubmit({
   variant = "destructive",
   size = "sm",
   className = "",
+  disabled = false,
 }: {
   children: React.ReactNode;
   message: string;
   variant?: Variant;
   size?: Size;
   className?: string;
+  disabled?: boolean;
 }) {
   return (
     <Button
@@ -29,6 +31,7 @@ export function ConfirmSubmit({
       variant={variant}
       size={size}
       className={className}
+      disabled={disabled}
       onClick={(e) => {
         if (!confirm(message)) e.preventDefault();
       }}

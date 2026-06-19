@@ -1,6 +1,7 @@
-import { prisma } from "@/lib/prisma";
 import { DEMO_USER_ID, isPlaceholderDatabaseEnv } from "@/lib/demo-auth";
 import type { Prisma } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
+import { getDbUserById } from "@/lib/live-records";
 
 /**
  * Wraps a Prisma transaction with per-request JWT claims so that Postgres RLS
@@ -44,15 +45,11 @@ export async function getSessionContext() {
     throw new Error("Unauthorized");
   }
 
-  if (user.id === DEMO_USER_ID && !isPlaceholderDatabaseEnv()) {
-    const { ensureDemoAccount } = await import("@/lib/demo-account");
-    await ensureDemoAccount();
+  if (user.id === DEMO_USER_ID && isPlaceholderDatabaseEnv()) {
+    throw new Error("Demo mode is not configured for live database access.");
   }
 
-  const dbUser = await prisma.user.findUnique({
-    where: { id: user.id },
-    select: { companyId: true },
-  });
+  const dbUser = await getDbUserById(user.id);
 
   if (!dbUser) {
     throw new Error("User record not found");

@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { DEMO_EMAIL, DEMO_USER_ID } from "@/lib/demo-auth";
 import { PROVINCE_TAX } from "@/lib/constants";
 import { prisma } from "@/lib/prisma";
@@ -16,7 +17,7 @@ const DEFAULT_LABOUR_TEMPLATES = [
   { name: "PM Service (Annual / CVIP Prep)", description: "Full preventive maintenance inspection", defaultTime: 4.0 },
 ];
 
-export async function ensureDemoAccount() {
+async function ensureDemoAccountImpl() {
   const existingUser = await prisma.user.findUnique({
     where: { id: DEMO_USER_ID },
     select: { companyId: true },
@@ -52,6 +53,15 @@ export async function ensureDemoAccount() {
   });
 }
 
+export const ensureDemoAccount = cache(async () => {
+  try {
+    return await ensureDemoAccountImpl();
+  } catch (error) {
+    if (!isClosedConnectionError(error)) throw error;
+    return ensureDemoAccountImpl();
+  }
+});
+
 async function ensureDemoSeedData(
   companyId: string,
   tx: typeof prisma | Parameters<Parameters<typeof prisma.$transaction>[0]>[0] = prisma
@@ -80,4 +90,8 @@ async function ensureDemoSeedData(
       })),
     });
   }
+}
+
+function isClosedConnectionError(error: unknown) {
+  return error instanceof Error && error.message.includes("Server has closed the connection");
 }

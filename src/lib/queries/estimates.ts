@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import type { EstimateStatus } from "@prisma/client";
+import { getEstimateLive } from "@/lib/live-records";
 
 export async function getEstimates(
   companyId: string,
@@ -28,16 +29,7 @@ export async function getEstimates(
 }
 
 export async function getEstimate(id: string, companyId: string) {
-  return prisma.estimate.findUnique({
-    where: { id, companyId },
-    include: {
-      customer: true,
-      vehicle: true,
-      lines: { orderBy: { sortOrder: "asc" } },
-      workOrder: { select: { id: true, status: true } },
-      invoice: { select: { id: true, invoiceNumber: true } },
-    },
-  });
+  return getEstimateLive(id, companyId);
 }
 
 /** Full estimate by magic-link token, shaped like getEstimate, for the public print view. */

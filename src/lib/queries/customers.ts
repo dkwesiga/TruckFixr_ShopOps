@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { getCustomersWithVehiclesLive } from "@/lib/live-records";
 
 export async function getCustomers(companyId: string, search?: string) {
   return prisma.customer.findMany({
@@ -39,17 +40,5 @@ export async function getCustomerOptions(companyId: string) {
 
 /** Customers each with their vehicles — for the document start form's dependent pickers. */
 export async function getCustomersWithVehicles(companyId: string) {
-  return prisma.customer.findMany({
-    where: { companyId },
-    select: {
-      id: true,
-      name: true,
-      companyName: true,
-      vehicles: {
-        select: { id: true, unitNumber: true, year: true, make: true, model: true, plate: true },
-        orderBy: { createdAt: "desc" },
-      },
-    },
-    orderBy: { name: "asc" },
-  });
+  return getCustomersWithVehiclesLive(companyId);
 }

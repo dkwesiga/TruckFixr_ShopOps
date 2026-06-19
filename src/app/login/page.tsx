@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -114,6 +115,10 @@ export default function LoginPage() {
           >
             {mode === "password" ? "Sign in with email link instead" : "Sign in with password instead"}
           </button>
+
+          <Link href="/signup" className="block w-full text-center text-sm font-semibold text-[#004787]">
+            Create an account
+          </Link>
         </form>
 
         <div className="mt-5 rounded-lg border border-dashed border-[#c2c6d3] bg-white px-4 py-3 text-center text-xs font-semibold uppercase tracking-[0.14em] text-[#5f6673]">

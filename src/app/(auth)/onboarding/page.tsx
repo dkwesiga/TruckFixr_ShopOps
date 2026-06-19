@@ -1,10 +1,11 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createCompany } from "@/lib/actions/company";
-import { CANADIAN_PROVINCES } from "@/lib/constants";
+import { CANADIAN_PROVINCES, PAYMENT_METHOD_OPTIONS, PAYMENT_TERMS_OPTIONS } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { DEMO_USER_ID, isPlaceholderDatabaseEnv } from "@/lib/demo-auth";
 
 export default async function OnboardingPage() {
@@ -58,13 +59,44 @@ export default async function OnboardingPage() {
             hint="Used for new labour lines until you set a specific rate"
           />
 
+          <Input
+            label="GST/HST number"
+            name="gstHstNumber"
+            placeholder="e.g. 123456789 RT0001"
+            hint="Displayed on invoices for customers and bookkeeping"
+          />
+
+          <Select
+            label="Default invoice due date"
+            name="defaultPaymentTerms"
+            defaultValue="Due on receipt"
+            options={PAYMENT_TERMS_OPTIONS}
+            hint="Shown on new invoices as the expected payment timing"
+          />
+
+          <Select
+            label="Preferred payment method"
+            name="preferredPaymentMethod"
+            defaultValue="e_transfer"
+            options={PAYMENT_METHOD_OPTIONS}
+            hint="Shown in your default invoice terms"
+          />
+
+          <Textarea
+            label="Default invoice terms"
+            name="defaultTermsText"
+            rows={3}
+            defaultValue="Payment is expected by the due date shown on this invoice. Please contact the shop before making payment if any details need correction. Past-due balances may delay release of future work."
+            hint="You can edit this later in Settings"
+          />
+
           <Button type="submit" size="lg" className="w-full">
             Get Started
           </Button>
         </form>
 
         <div className="mt-5 rounded-lg border border-dashed border-[#c2c6d3] bg-white px-4 py-3 text-center text-sm leading-5 text-[#5f6673]">
-          Tax rates, logo, numbering, and terms can be configured later in Settings.
+          Tax rates, GST/HST number, logo, numbering, payment defaults, and terms can be configured later in Settings.
         </div>
         <p className="mt-5 text-center text-xs font-semibold uppercase tracking-[0.14em] text-[#5f6673]">
           Secure Terminal - ISO 27001

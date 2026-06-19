@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import type { InvoiceStatus } from "@prisma/client";
+import { getInvoiceLive } from "@/lib/live-records";
 
 export async function getInvoices(
   companyId: string,
@@ -27,15 +28,5 @@ export async function getInvoices(
 }
 
 export async function getInvoice(id: string, companyId: string) {
-  return prisma.invoice.findUnique({
-    where: { id, companyId },
-    include: {
-      customer: true,
-      vehicle: true,
-      lines: { orderBy: { sortOrder: "asc" } },
-      payments: { orderBy: { date: "desc" } },
-      estimate: { select: { id: true, estimateNumber: true } },
-      workOrder: { select: { id: true } },
-    },
-  });
+  return getInvoiceLive(id, companyId);
 }

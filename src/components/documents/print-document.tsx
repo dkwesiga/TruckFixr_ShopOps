@@ -6,6 +6,7 @@ export interface PrintCompany {
   phone: string | null;
   email: string | null;
   logoUrl: string | null;
+  gstHstNumber: string | null;
   termsText: string | null;
   warrantyText: string | null;
 }
@@ -23,9 +24,9 @@ export interface PrintDocProps {
   company: PrintCompany;
   number: string;
   statusLabel?: string | null;
-  issuedDate: Date;
-  dueDate?: Date | null;
-  expiryDate?: Date | null;
+  issuedDate: Date | string | number | null;
+  dueDate?: Date | string | number | null;
+  expiryDate?: Date | string | number | null;
   paymentTerms?: string | null;
   customer: {
     name: string;
@@ -56,6 +57,11 @@ export interface PrintDocProps {
 }
 
 const TYPE_LABEL: Record<string, string> = { labour: "Labour", part: "Part", fee: "Fee" };
+const INVOICE_DISCLAIMER = [
+  "This invoice reflects the work, parts, and services recorded by the shop at the time of issue.",
+  "Please review all line items, taxes, and vehicle details before making payment.",
+  "Any warranty, return, or compliance obligations are governed by the shop's written terms and applicable local law.",
+];
 
 /** Print-optimised estimate/invoice document. Pure presentational server component. */
 export function PrintDocument(p: PrintDocProps) {
@@ -77,6 +83,9 @@ export function PrintDocument(p: PrintDocProps) {
           <div className="text-xs text-gray-600 whitespace-pre-line mt-1">
             {p.company.logoUrl && <p className="font-semibold text-gray-800">{p.company.name}</p>}
             {p.company.address && <p>{p.company.address}</p>}
+            {p.kind === "invoice" && p.company.gstHstNumber && (
+              <p><span className="font-medium text-gray-700">GST/HST number:</span> {p.company.gstHstNumber}</p>
+            )}
             {(p.company.phone || p.company.email) && (
               <p>{[p.company.phone, p.company.email].filter(Boolean).join(" · ")}</p>
             )}
@@ -103,6 +112,9 @@ export function PrintDocument(p: PrintDocProps) {
         <div className="text-right space-y-0.5">
           <MetaRow label={p.kind === "estimate" ? "Date" : "Invoice date"} value={fmtDate(p.issuedDate)} />
           {p.kind === "invoice" && p.dueDate && <MetaRow label="Due date" value={fmtDate(p.dueDate)} />}
+          {p.kind === "invoice" && (
+            <MetaRow label="Payment expected" value={paymentExpectation(p.dueDate, p.paymentTerms)} />
+          )}
           {p.kind === "invoice" && p.paymentTerms && <MetaRow label="Terms" value={p.paymentTerms} />}
           {p.kind === "estimate" && p.expiryDate && <MetaRow label="Valid until" value={fmtDate(p.expiryDate)} />}
         </div>
@@ -182,6 +194,17 @@ export function PrintDocument(p: PrintDocProps) {
         </div>
       )}
 
+      {p.kind === "invoice" && (
+        <div className="mt-5 text-xs">
+          <p className="font-semibold mb-0.5">Invoice disclaimer</p>
+          <div className="text-gray-600 space-y-0.5">
+            {INVOICE_DISCLAIMER.map((sentence) => (
+              <p key={sentence}>{sentence}</p>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="mt-6 border-t border-gray-200 pt-3 text-[11px] text-gray-500 space-y-1">
         {p.company.termsText && <p className="whitespace-pre-line">{p.company.termsText}</p>}
         {p.company.warrantyText && <p className="whitespace-pre-line">{p.company.warrantyText}</p>}
@@ -210,6 +233,17 @@ function TotalRow({ label, value, bold }: { label: string; value: string; bold?:
   );
 }
 
-function fmtDate(d: Date): string {
-  return new Intl.DateTimeFormat("en-CA", { year: "numeric", month: "short", day: "numeric" }).format(d);
+function fmtDate(value: Date | string | number | null | undefined): string {
+  const date = value instanceof Date ? value : value ? new Date(value) : null;
+  if (!date || Number.isNaN(date.getTime())) return "Unknown date";
+  return new Intl.DateTimeFormat("en-CA", { year: "numeric", month: "short", day: "numeric" }).format(date);
+}
+
+function paymentExpectation(
+  dueDate: Date | string | number | null | undefined,
+  paymentTerms: string | null | undefined
+): string {
+  if (dueDate) return `By ${fmtDate(dueDate)}`;
+  if (paymentTerms) return paymentTerms;
+  return "Due on receipt";
 }

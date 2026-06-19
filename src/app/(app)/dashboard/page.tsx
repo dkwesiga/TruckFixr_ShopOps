@@ -2,6 +2,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DEMO_USER_ID, isPlaceholderDatabaseEnv } from "@/lib/demo-auth";
+import { getCompanyNameByUserId } from "@/lib/live-records";
+import { RoutePrefetcher } from "@/components/navigation/route-prefetcher";
 
 const tasks = [
   {
@@ -45,24 +47,16 @@ export default async function DashboardPage() {
     return <DashboardSurface name="Dickson" demo />;
   }
 
-  const { prisma } = await import("@/lib/prisma");
-  if (user.id === DEMO_USER_ID) {
-    const { ensureDemoAccount } = await import("@/lib/demo-account");
-    await ensureDemoAccount();
-  }
+  const companyName = await getCompanyNameByUserId(user.id);
+  if (!companyName) redirect("/onboarding");
 
-  const dbUser = await prisma.user.findUnique({
-    where: { id: user.id },
-    include: { company: { select: { name: true } } },
-  });
-  if (!dbUser) redirect("/onboarding");
-
-  return <DashboardSurface name={dbUser.company.name} />;
+  return <DashboardSurface name={companyName} />;
 }
 
 function DashboardSurface({ name, demo = false }: { name: string; demo?: boolean }) {
   return (
     <div className="space-y-7">
+      <RoutePrefetcher routes={["/estimates/new", "/invoices/new", "/parts-purchase/new", "/receivables"]} />
       <section className="pt-2">
         <h1 className="text-[32px] font-bold leading-10 text-[#191c20]">Good afternoon, {name}</h1>
         <p className="mt-1 text-base leading-6 text-[#5f6673]">Here&apos;s what&apos;s happening at the shop today.</p>

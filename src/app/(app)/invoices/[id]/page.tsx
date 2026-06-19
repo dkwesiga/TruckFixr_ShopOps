@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { prisma } from "@/lib/prisma";
 import { getInvoice } from "@/lib/queries/invoices";
 import { getItemOptions } from "@/lib/queries/items";
 import { PageHeader } from "@/components/layout/page-header";
@@ -29,8 +28,17 @@ import {
   recordPayment,
   deletePayment,
 } from "@/lib/actions/invoices";
+import { getDbUserById } from "@/lib/live-records";
 
 const METHOD_LABEL = Object.fromEntries(PAYMENT_METHOD_OPTIONS.map((m) => [m.value, m.label]));
+const DATE_FORMATTER = new Intl.DateTimeFormat("en-CA", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+});
+const PREVIEW_LINK_CLASS =
+  "inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-[#c2c6d3] bg-white px-5 py-3 text-base font-semibold text-[#004787] transition-colors hover:bg-[#f1f3f9] active:bg-[#e8ebf3]";
+const LINE_TYPE_ORDER: Record<string, number> = { labour: 0, part: 1, fee: 2 };
 
 export default async function InvoiceDetailPage({
   params,
@@ -45,7 +53,7 @@ export default async function InvoiceDetailPage({
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id }, select: { companyId: true } });
+  const dbUser = await getDbUserById(user.id);
   if (!dbUser) redirect("/onboarding");
 
   const invoice = await getInvoice(id, dbUser.companyId);
@@ -55,17 +63,19 @@ export default async function InvoiceDetailPage({
   const locked = invoice.status === "void" || invoice.status === "paid";
   const balanceDue = toNum(invoice.balanceDue);
 
-  const lines: LineView[] = invoice.lines.map((l) => ({
-    id: l.id,
-    type: l.type,
-    description: l.description,
-    quantity: toNum(l.quantity),
-    unitPrice: toNum(l.unitPrice),
-    total: toNum(l.total),
-    taxable: l.taxable,
-    aiSuggested: l.aiSuggested,
-    isVariance: l.isVariance,
-  }));
+  const lines: LineView[] = invoice.lines
+    .map((l) => ({
+      id: l.id,
+      type: l.type,
+      description: l.description,
+      quantity: toNum(l.quantity),
+      unitPrice: toNum(l.unitPrice),
+      total: toNum(l.total),
+      taxable: l.taxable,
+      aiSuggested: l.aiSuggested,
+      isVariance: l.isVariance,
+    }))
+    .sort((a, b) => (LINE_TYPE_ORDER[a.type] ?? 9) - (LINE_TYPE_ORDER[b.type] ?? 9));
 
   const items: ItemOption[] = itemsRaw.map((i) => ({
     id: i.id,
@@ -89,7 +99,7 @@ export default async function InvoiceDetailPage({
         backHref="/invoices"
         action={
           <div className="flex items-center gap-1">
-            <Link href={`/print/invoice/${id}`} className="text-sm text-[#004787] font-medium px-2 py-1">PDF</Link>
+            <Link href={`/print/invoice/${id}`} className="text-sm text-[#004787] font-medium px-2 py-1">Preview</Link>
             {!locked && <Link href={`/invoices/${id}/edit`} className="text-sm text-[#004787] font-medium px-2 py-1">Edit</Link>}
           </div>
         }
@@ -202,9 +212,25 @@ export default async function InvoiceDetailPage({
         {/* Actions */}
         <div className="space-y-2 pt-1">
           {invoice.status === "draft" && (
-            <form action={sendInvoice.bind(null, id)}>
-              <Button type="submit" size="lg" className="w-full" disabled={lines.length === 0}>Send invoice</Button>
-            </form>
+            <>
+              <div className="grid grid-cols-2 gap-2">
+                <Link href={`/print/invoice/${id}`} className={PREVIEW_LINK_CLASS}>
+                  Preview invoice
+                </Link>
+                <form action={sendInvoice.bind(null, id)}>
+                  <ConfirmSubmit
+                    message="Send this invoice now? Preview it first if you have not reviewed it."
+                    variant="primary"
+                    size="lg"
+                    className="w-full"
+                    disabled={lines.length === 0}
+                  >
+                    Send invoice
+                  </ConfirmSubmit>
+                </form>
+              </div>
+              {lines.length === 0 && <p className="text-xs text-[#858b98] text-center">Add at least one line before sending.</p>}
+            </>
           )}
 
           {emailEnabled && invoice.status !== "void" && invoice.status !== "draft" && (
@@ -254,6 +280,8 @@ function Total({ label, value, bold }: { label: string; value: string; bold?: bo
   );
 }
 
-function fmtDate(d: Date): string {
-  return new Intl.DateTimeFormat("en-CA", { month: "short", day: "numeric", year: "numeric" }).format(d);
+function fmtDate(value: Date | string | number | null | undefined): string {
+  const date = value instanceof Date ? value : value ? new Date(value) : null;
+  if (!date || Number.isNaN(date.getTime())) return "Unknown date";
+  return DATE_FORMATTER.format(date);
 }

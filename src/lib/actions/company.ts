@@ -6,7 +6,8 @@ import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { getSessionContext, withRLS } from "@/lib/rls";
 import { uploadCompanyLogo } from "@/lib/storage";
-import { PROVINCE_TAX } from "@/lib/constants";
+import { PAYMENT_METHOD_OPTIONS, PROVINCE_TAX } from "@/lib/constants";
+import { mergeGstHstNumber, sanitizeGstHstNumber } from "@/lib/company-doc-settings";
 
 const DEFAULT_LABOUR_TEMPLATES = [
   { name: "Oil & Filter Change", description: "Engine oil and filter service", defaultTime: 1.0 },
@@ -27,6 +28,10 @@ export async function createCompany(formData: FormData): Promise<void> {
   const name = (formData.get("name") as string | null)?.trim();
   const province = (formData.get("province") as string | null) ?? "ON";
   const defaultLabourRateRaw = formData.get("defaultLabourRate") as string | null;
+  const defaultPaymentTerms = str(formData.get("defaultPaymentTerms")) ?? "Due on receipt";
+  const preferredPaymentMethod = paymentMethodLabel(str(formData.get("preferredPaymentMethod")));
+  const defaultTermsText = str(formData.get("defaultTermsText"));
+  const gstHstNumber = sanitizeGstHstNumber(formData.get("gstHstNumber"));
 
   if (!name) redirect("/onboarding?error=Company+name+is+required");
 
@@ -42,7 +47,12 @@ export async function createCompany(formData: FormData): Promise<void> {
 
   await prisma.$transaction(async (tx) => {
     const company = await tx.company.create({
-      data: { name, province, defaultLabourRate },
+      data: {
+        name,
+        province,
+        defaultLabourRate,
+        termsText: buildDefaultTermsText(defaultPaymentTerms, preferredPaymentMethod, defaultTermsText, gstHstNumber),
+      },
     });
 
     await tx.user.create({
@@ -93,7 +103,7 @@ export async function updateCompanyDetails(formData: FormData): Promise<void> {
         phone: str(formData.get("phone")),
         email: str(formData.get("email")),
         numberingPrefix: str(formData.get("numberingPrefix")),
-        termsText: str(formData.get("termsText")),
+        termsText: mergeGstHstNumber(str(formData.get("termsText")), sanitizeGstHstNumber(formData.get("gstHstNumber"))),
         warrantyText: str(formData.get("warrantyText")),
         ...(isNaN(labourRate) || labourRate <= 0 ? {} : { defaultLabourRate: labourRate }),
       },
@@ -144,4 +154,21 @@ export async function removeLogo(): Promise<void> {
 function str(val: FormDataEntryValue | null): string | null {
   const s = (val as string | null)?.trim();
   return s || null;
+}
+
+function paymentMethodLabel(value: string | null): string {
+  return PAYMENT_METHOD_OPTIONS.find((option) => option.value === value)?.label ?? "E-transfer";
+}
+
+function buildDefaultTermsText(
+  defaultPaymentTerms: string,
+  preferredPaymentMethod: string,
+  termsText: string | null,
+  gstHstNumber: string | null
+): string {
+  return mergeGstHstNumber([
+    `Default payment timing: ${defaultPaymentTerms}.`,
+    `Preferred payment method: ${preferredPaymentMethod}.`,
+    termsText,
+  ].filter(Boolean).join("\n"), gstHstNumber) ?? "";
 }

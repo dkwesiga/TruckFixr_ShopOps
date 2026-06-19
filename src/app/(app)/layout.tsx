@@ -5,6 +5,7 @@ import { BottomNav } from "@/components/layout/bottom-nav";
 import { OfflineProvider } from "@/lib/offline/provider";
 import { LocalDocsProvider } from "@/lib/offline/local-docs-provider";
 import { DEMO_USER_ID, isPlaceholderDatabaseEnv } from "@/lib/demo-auth";
+import { getCompanyNameByUserId, getDbUserById } from "@/lib/live-records";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -16,7 +17,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <OfflineProvider>
         <LocalDocsProvider>
           <div className="min-h-screen bg-[#f9f9ff]">
-            <AppTopBar />
+            <AppTopBar email={user.email} companyName="TruckFixr Demo Shop" />
             <main className="mx-auto min-h-screen max-w-5xl px-4 pb-28 pt-20">{children}</main>
             <BottomNav />
           </div>
@@ -25,25 +26,19 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     );
   }
 
-  const { prisma } = await import("@/lib/prisma");
-  if (user.id === DEMO_USER_ID) {
-    const { ensureDemoAccount } = await import("@/lib/demo-account");
-    await ensureDemoAccount();
-  }
-
-  const dbUser = await prisma.user.findUnique({
-    where: { id: user.id },
-    select: { companyId: true },
-  });
+  const dbUser = await getDbUserById(user.id);
   if (!dbUser) redirect("/onboarding");
+  const companyName = await getCompanyNameByUserId(user.id);
 
   return (
     <OfflineProvider>
-      <div className="min-h-screen bg-[#f9f9ff]">
-        <AppTopBar />
-        <main className="mx-auto min-h-screen max-w-5xl px-4 pb-28 pt-20">{children}</main>
-        <BottomNav />
-      </div>
+      <LocalDocsProvider>
+        <div className="min-h-screen bg-[#f9f9ff]">
+          <AppTopBar email={user.email} companyName={companyName} />
+          <main className="mx-auto min-h-screen max-w-5xl px-4 pb-28 pt-20">{children}</main>
+          <BottomNav />
+        </div>
+      </LocalDocsProvider>
     </OfflineProvider>
   );
 }

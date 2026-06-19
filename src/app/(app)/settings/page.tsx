@@ -10,6 +10,7 @@ import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { CANADIAN_PROVINCES, PROVINCE_TAX } from "@/lib/constants";
 import { toNum } from "@/lib/money";
+import { extractGstHstNumber, stripGstHstNumber } from "@/lib/company-doc-settings";
 
 export default async function SettingsPage({
   searchParams,
@@ -28,6 +29,8 @@ export default async function SettingsPage({
 
   const { saved, error } = await searchParams;
   const tax = PROVINCE_TAX[company.province] ?? PROVINCE_TAX["ON"];
+  const gstHstNumber = extractGstHstNumber(company.termsText);
+  const termsText = stripGstHstNumber(company.termsText);
 
   return (
     <div>
@@ -95,12 +98,19 @@ export default async function SettingsPage({
             min="0"
             defaultValue={toNum(company.defaultLabourRate).toString()}
           />
+          <Input
+            label="GST/HST number"
+            name="gstHstNumber"
+            defaultValue={gstHstNumber ?? ""}
+            placeholder="e.g. 123456789 RT0001"
+            hint="Shown neatly on invoice headers"
+          />
         </section>
 
         <section className="space-y-4">
           <h2 className="industrial-label">Documents &amp; branding</h2>
           <Input label="Document number prefix" name="numberingPrefix" defaultValue={company.numberingPrefix ?? ""} placeholder="Leave blank for EST/INV" hint="Used on new estimates & invoices" />
-          <Textarea label="Terms / disclaimer" name="termsText" defaultValue={company.termsText ?? ""} placeholder="Payment terms, disclaimers shown on documents" rows={3} />
+          <Textarea label="Terms / disclaimer" name="termsText" defaultValue={termsText ?? ""} placeholder="Payment terms, disclaimers shown on documents" rows={3} />
           <Textarea label="Warranty text" name="warrantyText" defaultValue={company.warrantyText ?? ""} placeholder="Warranty statement shown on documents" rows={2} />
         </section>
 

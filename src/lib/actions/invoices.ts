@@ -4,14 +4,17 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import type { Prisma, ItemType, PaymentMethod } from "@prisma/client";
 import { getSessionContext, withRLS } from "@/lib/rls";
-import {
-  nextInvoiceNumber,
-  recalcInvoiceTotals,
-} from "@/lib/documents";
-import { resolveDocumentStart } from "@/lib/actions/document-start";
+import { nextInvoiceNumber, recalcInvoiceTotals } from "@/lib/documents";
 import { lineTotal } from "@/lib/money";
 import { emailEnabled } from "@/lib/email/config";
 import { dispatchInvoiceEmail } from "@/lib/email/dispatch";
+import {
+  addInvoiceLineLive,
+  createInvoiceLive,
+  deleteInvoiceLineLive,
+  sendInvoiceLive,
+  updateInvoiceLineLive,
+} from "@/lib/live-records";
 
 /** Best-effort email send → `?notice=` query param; never throws. */
 async function tryEmail(fn: () => Promise<"sent" | "no-email">): Promise<string> {
@@ -29,32 +32,8 @@ async function tryEmail(fn: () => Promise<"sent" | "no-email">): Promise<string>
 // ---------------------------------------------------------------------------
 
 export async function createInvoice(formData: FormData): Promise<void> {
-  const { userId, companyId } = await getSessionContext();
-
-  const invoice = await withRLS(userId, companyId, async (tx) => {
-    const { customerId, vehicleId } = await resolveDocumentStart(tx, companyId, formData, "/invoices/new");
-    const company = await tx.company.findUnique({
-      where: { id: companyId },
-      select: { numberingPrefix: true },
-    });
-    const customer = await tx.customer.findUnique({
-      where: { id: customerId!, companyId },
-      select: { paymentTerms: true },
-    });
-    const invoiceDate = new Date();
-    return tx.invoice.create({
-      data: {
-        companyId,
-        invoiceNumber: await nextInvoiceNumber(tx, companyId, company?.numberingPrefix),
-        customerId,
-        vehicleId,
-        invoiceDate,
-        paymentTerms: customer?.paymentTerms ?? null,
-        dueDate: dueDateFromTerms(customer?.paymentTerms ?? null, invoiceDate),
-        internalNotes: str(formData.get("complaint")),
-      },
-    });
-  });
+  const { companyId } = await getSessionContext();
+  const invoice = await createInvoiceLive(companyId, formData);
 
   revalidatePath("/invoices");
   redirect(`/invoices/${invoice.id}`);
@@ -179,6 +158,10 @@ export async function addInvoiceLine(formData: FormData): Promise<void> {
   const description = str(formData.get("description"));
   if (!invoiceId || !description) redirect(`/invoices/${invoiceId ?? ""}?error=Line+needs+a+description`);
 
+  await addInvoiceLineLive(companyId, formData);
+  revalidatePath(`/invoices/${invoiceId}`);
+  redirect(`/invoices/${invoiceId}`);
+
   const quantity = dec(formData.get("quantity")) ?? 1;
   const unitPrice = dec(formData.get("unitPrice")) ?? 0;
   const type = (str(formData.get("type")) as ItemType | null) ?? "part";
@@ -217,6 +200,10 @@ export async function updateInvoiceLine(formData: FormData): Promise<void> {
   const invoiceId = str(formData.get("invoiceId"));
   if (!lineId || !invoiceId) redirect(`/invoices/${invoiceId ?? ""}`);
 
+  await updateInvoiceLineLive(companyId, formData);
+  revalidatePath(`/invoices/${invoiceId}`);
+  redirect(`/invoices/${invoiceId}`);
+
   const quantity = dec(formData.get("quantity")) ?? 1;
   const unitPrice = dec(formData.get("unitPrice")) ?? 0;
 
@@ -246,6 +233,10 @@ export async function deleteInvoiceLine(formData: FormData): Promise<void> {
   const invoiceId = str(formData.get("invoiceId"));
   if (!lineId || !invoiceId) redirect(`/invoices/${invoiceId ?? ""}`);
 
+  await deleteInvoiceLineLive(companyId, formData);
+  revalidatePath(`/invoices/${invoiceId}`);
+  redirect(`/invoices/${invoiceId}`);
+
   await withRLS(userId, companyId, async (tx) => {
     const invoice = await tx.invoice.findUnique({ where: { id: invoiceId!, companyId }, select: { id: true } });
     if (!invoice) return;
@@ -263,10 +254,8 @@ export async function deleteInvoiceLine(formData: FormData): Promise<void> {
 // ---------------------------------------------------------------------------
 
 export async function sendInvoice(id: string): Promise<void> {
-  const { userId, companyId } = await getSessionContext();
-  await withRLS(userId, companyId, (tx) =>
-    tx.invoice.update({ where: { id, companyId }, data: { status: "sent", sentAt: new Date() } })
-  );
+  const { companyId } = await getSessionContext();
+  await sendInvoiceLive(companyId, id);
   const notice = await tryEmail(() => dispatchInvoiceEmail(id, companyId));
   revalidatePath(`/invoices/${id}`);
   redirect(`/invoices/${id}${notice}`);

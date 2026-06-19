@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { DEMO_USER_ID } from "@/lib/demo-auth";
 import { PageHeader } from "@/components/layout/page-header";
 import { DocumentStartForm } from "@/components/documents/document-start-form";
+import { getDbUserById } from "@/lib/live-records";
 
 export default async function NewInvoicePage({
   searchParams,
@@ -15,17 +15,11 @@ export default async function NewInvoicePage({
 
   const { customerId, error } = await searchParams;
 
-  const [{ prisma }, { getCustomersWithVehicles }, { createInvoice }] = await Promise.all([
-    import("@/lib/prisma"),
+  const [{ getCustomersWithVehicles }, { createInvoice }] = await Promise.all([
     import("@/lib/queries/customers"),
     import("@/lib/actions/invoices"),
   ]);
-  if (user.id === DEMO_USER_ID) {
-    const { ensureDemoAccount } = await import("@/lib/demo-account");
-    await ensureDemoAccount();
-  }
-
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id }, select: { companyId: true } });
+  const dbUser = await getDbUserById(user.id);
   if (!dbUser) redirect("/onboarding");
 
   const customers = await getCustomersWithVehicles(dbUser.companyId);
