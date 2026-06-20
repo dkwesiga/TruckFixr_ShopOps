@@ -20,7 +20,7 @@
     "@sentry/nextjs": "^8.55.2",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.108.2",
-    "next": "15.5.0",
+    "next": "15.5.7",
     "pg": "^8.21.0",
     "prisma": "^6.19.3",
     "react": "19.1.0",
