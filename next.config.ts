@@ -4,7 +4,7 @@ import { withSentryConfig } from "@sentry/nextjs";
 
 const nextConfig: NextConfig = {
   // Suppress workspace-root inference warning when the project is nested
-  outputFileTracingRoot: path.join(__dirname, ".."),
+  ...(process.env.VERCEL ? {} : { outputFileTracingRoot: path.join(__dirname, "..") }),
   // Allow an isolated build output dir (e.g. for CI or building while `next dev`
   // holds the default .next). Defaults to .next so dev/prod are unaffected.
   distDir: process.env.SHOPOPS_DIST_DIR || ".next",
